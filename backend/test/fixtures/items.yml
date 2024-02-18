@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item_name: MyString
+  description: MyText
+  price_per_unit: 1
+  available: false
+  available_from: 2024-02-18
+  available_to: 2024-02-18
+  max_days: 1
+  discount: 1
+
+two:
+  item_name: MyString
+  description: MyText
+  price_per_unit: 1
+  available: false
+  available_from: 2024-02-18
+  available_to: 2024-02-18
+  max_days: 1
+  discount: 1

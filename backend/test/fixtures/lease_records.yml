@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date_from: 2024-02-18
+  date_to: 2024-02-18
+  price_per_unit: 1
+  discount: 1
+  price_total: 1
+  renter_name: MyString
+  renter_email: MyString
+
+two:
+  date_from: 2024-02-18
+  date_to: 2024-02-18
+  price_per_unit: 1
+  discount: 1
+  price_total: 1
+  renter_name: MyString
+  renter_email: MyString

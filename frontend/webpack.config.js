@@ -1,7 +1,10 @@
 const path = require("path");
 const HTMLPlugin = require("html-webpack-plugin");
+const webpack = require('webpack');
+
 
 module.exports = {
+  mode: 'development',
   module: {
     rules: [
       {
@@ -26,10 +29,15 @@ module.exports = {
     new HTMLPlugin({
       template: path.join(__dirname, "src/index.html"),
     }),
+    new webpack.DefinePlugin({
+      process: {env: {}}
+    })
   ],
   devServer: {
     host: '0.0.0.0',
     port: 3000,
-    disableHostCheck: true,
+    allowedHosts: "all",
+    hot: "only",
+
   },
 };

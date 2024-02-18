@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
 
-const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://backend.localhost';
+
+const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL   || 'http://backend.localhost:3000';
 
 const fetchContent = async (updateContent: (content: string) => void) => {
   const response = await fetch(`${BACKEND_API_URL}/greetings/hello`,{

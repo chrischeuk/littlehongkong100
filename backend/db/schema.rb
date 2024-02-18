@@ -10,9 +10,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2024_02_18_004608) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "items", force: :cascade do |t|
+    t.string "item_name"
+    t.text "description"
+    t.integer "price_per_unit"
+    t.boolean "available"
+    t.date "available_from"
+    t.date "available_to"
+    t.integer "max_days"
+    t.integer "discount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "lease_records", force: :cascade do |t|
+    t.date "date_from"
+    t.date "date_to"
+    t.integer "price_per_unit"
+    t.integer "discount"
+    t.integer "price_total"
+    t.string "renter_name"
+    t.string "renter_email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
 end
