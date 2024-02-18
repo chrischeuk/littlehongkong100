@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_18_004608) do
+ActiveRecord::Schema.define(version: 2024_02_18_123331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2024_02_18_004608) do
     t.string "item_name"
     t.text "description"
     t.integer "price_per_unit"
-    t.boolean "available"
+    t.boolean "available", null: false
     t.date "available_from"
     t.date "available_to"
     t.integer "max_days"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 2024_02_18_004608) do
     t.string "renter_email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "item_id"
   end
 
 end
