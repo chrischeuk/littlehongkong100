@@ -18,6 +18,8 @@ services:
       - ./backend:/backend
     depends_on:
       - db
+    ports:
+      - 3000:3000      
   frontend:
     container_name: frontend
     image: "node:21-alpine"
@@ -25,13 +27,16 @@ services:
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
-    command: "yarn run dev"
-    depends_on:
-      - backend
-  yaichi:
-    container_name: yaichi
-    image: mtsmfm/yaichi:1.5.0
+    command: "yarn run dev --port 5000"
+    # depends_on:
+    #   - backend
     ports:
-      - 3000:3000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+        - 5000:5000      
+  # yaichi:
+  #   container_name: yaichi
+  #   image: mtsmfm/yaichi:1.5.0
+  #   ports:
+  #     - 3000:3000
+      
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock

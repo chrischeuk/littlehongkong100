@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 
 
-const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL   || 'http://backend.localhost:3000';
+const BACKEND_API_URL = process.env.REACT_APP_BACKEND_API_URL || "http://35.200.59.229:3000"  ;
 
 const fetchContent = async (updateContent: (content: string) => void) => {
   const response = await fetch(`${BACKEND_API_URL}/greetings/hello`,{
@@ -27,6 +27,8 @@ const App: React.FC = () => {
       <header className="App-header">
         <p>
           {content}
+          
+          {process.env.REACT_APP_BACKEND_API_URL}
         </p>
       </header>
     </div>

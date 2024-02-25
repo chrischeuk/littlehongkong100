@@ -1,5 +1,5 @@
 class GreetingsController < ApplicationController
   def hello
-    render json: { content: 'Hello from Rails' }
+    render json: { content: "Hellow from rails"  }
   end
 end

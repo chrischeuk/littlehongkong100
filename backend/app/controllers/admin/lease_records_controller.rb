@@ -42,5 +42,10 @@ module Admin
 
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
     # for more information
+
+    # def after_resource_updated_path(requested_resource)
+    #   Rails::Server.new.options[:Port]
+    # end
+        
   end
 end

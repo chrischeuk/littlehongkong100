@@ -6,11 +6,14 @@
 # you're free to overwrite the RESTful controller actions.
 module Admin
   class ApplicationController < Administrate::ApplicationController
-    before_action :authenticate_admin
+    skip_before_action :verify_authenticity_token
 
-    def authenticate_admin
-      # TODO Add authentication logic here.
-    end
+    # before_action :authenticate_admin
+
+    # def authenticate_admin
+    #   # TODO Add authentication logic here.
+    #   return true
+    # end
 
     # Override this value to specify the number of elements to display at a time
     # on index pages. Defaults to 20.
