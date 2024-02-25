@@ -19,6 +19,7 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     renter_name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    item_name: Field::String
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -30,7 +31,8 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     id
     date_from
     date_to
-    discount
+    item_name
+    
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -40,13 +42,14 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     date_from
     date_to
     discount
-    item
+    item_name
     price_per_unit
     price_total
     renter_email
     renter_name
     created_at
     updated_at
+
   ].freeze
 
   # FORM_ATTRIBUTES

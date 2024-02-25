@@ -29,7 +29,7 @@ class ItemDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     id
-    available
+    item_name
     available_from
     available_to
   ].freeze

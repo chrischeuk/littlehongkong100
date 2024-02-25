@@ -1,5 +1,14 @@
+class DuplicationValidator < ActiveModel::Validator
+  def validate(record)
+    if LeaseRecord.where(item_id:record.item_id).where.not(id:record.id).has_lease_record_between(record.date_from,record.date_to).count>0
+      record.errors.add :base, "There is duplication"
+    end
+  end
+end
+
 class LeaseRecord < ApplicationRecord
   belongs_to :item
+
   scope :has_lease_record_on, ->(date){where(["date_from <= ? ", date]).where(["date_to >= ? ", date])}
   # scope :not_leased_on, ->(date){where.not(id: leased_on(date))}
   scope :has_lease_record_end_between_the_requested_period, ->(start_date, end_date){
@@ -20,4 +29,12 @@ class LeaseRecord < ApplicationRecord
     .or(has_lease_record_within_the_requested_period(start_date, end_date))    
     .or(has_lease_record_start_between_the_requested_period(start_date, end_date))
   }
+
+  validates_with DuplicationValidator
+  def item_name
+    self.item.item_name
+  end
+
+
 end
+
