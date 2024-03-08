@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   db:
     container_name: postgres
@@ -6,7 +6,7 @@ services:
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
     ports:
-      - "5432:5432"      
+      - "5432:5432"
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
   backend:
@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     ports:
-      - 3000:3000      
+      - 3000:3000
   frontend:
     container_name: frontend
     image: "node:21-alpine"
@@ -27,16 +27,18 @@ services:
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
-    command: "yarn run dev --port 5000"
+    command: "yarn run start"
     # depends_on:
     #   - backend
     ports:
-        - 5000:5000      
+      - 5000:5000
+    env_file:
+      - .env.local
   # yaichi:
   #   container_name: yaichi
   #   image: mtsmfm/yaichi:1.5.0
   #   ports:
   #     - 3000:3000
-      
+
   #   volumes:
   #     - /var/run/docker.sock:/var/run/docker.sock

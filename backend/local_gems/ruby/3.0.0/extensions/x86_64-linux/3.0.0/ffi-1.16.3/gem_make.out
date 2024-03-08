@@ -1,5 +1,5 @@
 current directory: /backend/local_gems/ruby/3.0.0/gems/ffi-1.16.3/ext/ffi_c
-/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240223-16-b4hkqy.rb extconf.rb
+/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240304-15-h1i6ai.rb extconf.rb
 checking for ffi_prep_closure_loc() in -lffi... yes
 checking for ffi_prep_cif_var()... yes
 checking for ffi_raw_call()... yes
@@ -41,4 +41,4 @@ linking shared-object ffi_c.so
 
 current directory: /backend/local_gems/ruby/3.0.0/gems/ffi-1.16.3/ext/ffi_c
 make "DESTDIR=" install
-/usr/bin/install -c -m 0755 ffi_c.so ./.gem.20240223-16-c3ny6z
+/usr/bin/install -c -m 0755 ffi_c.so ./.gem.20240304-15-wlhzrx

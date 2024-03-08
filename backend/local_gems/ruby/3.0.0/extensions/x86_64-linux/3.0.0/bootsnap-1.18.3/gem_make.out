@@ -1,5 +1,5 @@
 current directory: /backend/local_gems/ruby/3.0.0/gems/bootsnap-1.18.3/ext/bootsnap
-/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240223-16-12f9f1.rb extconf.rb
+/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240304-15-c8zepl.rb extconf.rb
 checking for fdatasync() in unistd.h... yes
 checking for whether -D_GNU_SOURCE is accepted as CPPFLAGS... yes
 checking for whether -O3 is accepted as CFLAGS... yes
@@ -16,4 +16,4 @@ linking shared-object bootsnap/bootsnap.so
 
 current directory: /backend/local_gems/ruby/3.0.0/gems/bootsnap-1.18.3/ext/bootsnap
 make "DESTDIR=" install
-/usr/bin/install -c -m 0755 bootsnap.so ./.gem.20240223-16-b7b0e0/bootsnap
+/usr/bin/install -c -m 0755 bootsnap.so ./.gem.20240304-15-jcl0hl/bootsnap

@@ -18,7 +18,9 @@
 /storage/*
 
 /node_modules
+/frontend/node_modules
 /yarn-error.log
+/backend/local_gems
 
 /public/assets
 .byebug_history

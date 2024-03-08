@@ -1,5 +1,5 @@
 current directory: /backend/local_gems/ruby/3.0.0/gems/sassc-2.4.0/ext
-/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240223-1-8viy6k.rb extconf.rb
+/usr/local/bin/ruby -I /usr/local/lib/ruby/3.0.0 -r ./siteconf20240304-15-ct4xyx.rb extconf.rb
 creating Makefile
 
 current directory: /backend/local_gems/ruby/3.0.0/gems/sassc-2.4.0/ext
@@ -77,4 +77,4 @@ linking shared-object sassc/libsass.so
 
 current directory: /backend/local_gems/ruby/3.0.0/gems/sassc-2.4.0/ext
 make "DESTDIR=" install
-/usr/bin/install -c -m 0755 libsass.so ./.gem.20240223-1-gbhevo/sassc
+/usr/bin/install -c -m 0755 libsass.so ./.gem.20240304-15-kxlge0/sassc

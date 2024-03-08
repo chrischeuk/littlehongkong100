@@ -73,4 +73,8 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+  config.hosts << "urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev"
+  config.hosts << "urban-lamp-qr6qg9w6pvcx75j-5000.app.github.dev"
+           
+  
 end
