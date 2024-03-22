@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { start } from "repl";
 import "./UTCDatePicker.css";
 
-function convertUTCToLocalDate(date: Date | null): Date | null {
+export function convertUTCToLocalDate(date: Date | null): Date | null {
   if (!date) {
     return date;
   }
@@ -12,7 +12,7 @@ function convertUTCToLocalDate(date: Date | null): Date | null {
   dateOut = new Date(
     dateOut.getUTCFullYear(),
     dateOut.getUTCMonth(),
-    dateOut.getUTCDate(),
+    dateOut.getUTCDate()
   );
   return dateOut;
 }
@@ -23,20 +23,31 @@ function convertLocalToUTCDate(date: Date): Date {
   }
   date = new Date(date);
   date = new Date(
-    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+    Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
   );
   return date;
 }
 
+function addDate(date: Date): Date {
+  date = new Date();
+  date.setDate(date.getDate() + 365);
+  return date;
+}
+type excludedDatesType = {
+  start: Date;
+  end: Date;
+};
+
 type UTCDatePickerProps = {
   startDate: Date | null;
   endDate: Date | null;
-  // onChange(update: Date[] | null[]): void;
   setDateRange: React.Dispatch<React.SetStateAction<Date[] | null[]>>;
   selectsRange: boolean;
   withPortal?: boolean;
   inline?: boolean;
   disabledKeyboardNavigation: boolean;
+  excludeDateIntervals?: excludedDatesType[] | undefined;
+  // setSearchParams: any;
 };
 
 type forwardRefProps = {
@@ -50,6 +61,7 @@ export default function UTCDatePicker({
   startDate,
   endDate,
   setDateRange,
+  // setSearchParams,
   ...props
 }: UTCDatePickerProps) {
   const ExampleCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -57,8 +69,10 @@ export default function UTCDatePicker({
       <button className="example-custom-input" onClick={onClick} ref={ref}>
         {value ? value : "pick your date here"}
       </button>
-    ),
+    )
   );
+  const today = new Date();
+  const maxDate = addDate(today);
 
   return (
     <DatePicker
@@ -71,9 +85,8 @@ export default function UTCDatePicker({
           convertLocalToUTCDate(update[1]),
         ])
       }
-      excludeDateIntervals={[
-        { start: new Date("2024-3-5"), end: new Date("2024-3-6") },
-      ]}
+      minDate={today}
+      maxDate={addDate(today)}
       // selectsDisabledDaysInRange
       {...props}
     />

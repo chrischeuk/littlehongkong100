@@ -10,14 +10,8 @@ const fetchContent = async (updateContent: (content: string) => void) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Headers":
-          "Origin, Content-Type, X-Amz-Date, Authorization, X-Api-Key, X-Amz-Security-Token, locale",
-        "Access-Control-Allow-Methods": "GET, POST",
       },
     });
-    console.log(response);
     const data = await response.json();
     updateContent(data.content);
   } catch (error) {
