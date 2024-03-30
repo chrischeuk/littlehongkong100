@@ -27,7 +27,7 @@ services:
     working_dir: /frontend
     volumes:
       - ./frontend:/frontend
-    command: "yarn run start"
+    command: "yarn run dev"
     # depends_on:
     #   - backend
     ports:
