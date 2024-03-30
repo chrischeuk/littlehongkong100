@@ -96,7 +96,6 @@ export default function List() {
     }
   }, [dateRange]);
 
-  console.log("testing");
   return (
     <div className="List">
       <HelloFromRail />

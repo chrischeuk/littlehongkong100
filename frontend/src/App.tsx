@@ -15,9 +15,6 @@ const App: React.FC = () => {
         <ul>
           <Link to="/">Home</Link>
         </ul>
-        <ul>
-          <Link to="/item">Item</Link>
-        </ul>
       </nav>
       <Routes>
         <Route path="/" element={<List />} />
