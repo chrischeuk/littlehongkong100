@@ -34,7 +34,11 @@ class LeaseRecord < ApplicationRecord
   def item_name
     self.item.item_name
   end
-
-
+  def product_name
+    self.item.product.product_name
+  end
+  def brand_name
+    self.item.product.brand.brand_name
+  end
 end
 

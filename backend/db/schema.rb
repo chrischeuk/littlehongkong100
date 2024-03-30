@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_18_123331) do
+ActiveRecord::Schema.define(version: 2024_03_30_044412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "brands", force: :cascade do |t|
+    t.string "brand_name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "item_name"
@@ -26,6 +32,7 @@ ActiveRecord::Schema.define(version: 2024_02_18_123331) do
     t.integer "discount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "product_id"
   end
 
   create_table "lease_records", force: :cascade do |t|
@@ -39,6 +46,14 @@ ActiveRecord::Schema.define(version: 2024_02_18_123331) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "item_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "product_name"
+    t.bigint "brand_id"
+    t.text "product_description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end

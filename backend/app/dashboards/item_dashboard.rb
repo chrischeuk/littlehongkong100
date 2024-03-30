@@ -15,11 +15,14 @@ class ItemDashboard < Administrate::BaseDashboard
     description: Field::Text,
     discount: Field::Number,
     item_name: Field::String,
+    brand_name: Field::String,
+    product_name: Field::String,
     lease_records: Field::HasMany,
     max_days: Field::Number,
     price_per_unit: Field::Number,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    product: Field::BelongsTo,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -29,6 +32,8 @@ class ItemDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     id
+    brand_name
+    product_name
     item_name
     available_from
     available_to
@@ -43,12 +48,15 @@ class ItemDashboard < Administrate::BaseDashboard
     available_to
     description
     discount
+    brand_name
+    product_name    
     item_name
     lease_records
     max_days
     price_per_unit
     created_at
     updated_at
+    product
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -64,6 +72,7 @@ class ItemDashboard < Administrate::BaseDashboard
     lease_records
     max_days
     price_per_unit
+    product
   ].freeze
 
   # COLLECTION_FILTERS

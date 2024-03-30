@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   namespace :admin do
       resources :items
       resources :lease_records
+      resources :products
+      resources :brands
 
       root to: "items#index"
     end
