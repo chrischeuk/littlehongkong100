@@ -15,7 +15,7 @@ class ProductDashboard < Administrate::BaseDashboard
     product_name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    images: Field::Text
+    images: ProductImageField
   }.freeze
 
   # COLLECTION_ATTRIBUTES

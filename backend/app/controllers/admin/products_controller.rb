@@ -40,7 +40,7 @@ module Admin
     #     transform_values { |value| value == "" ? nil : value }
     # end
     def resource_params
-      params["product"]["images"] = params["product"]["images"].split(' ')
+      params["product"]["images"] = params["product"]["images"].reject(&:blank?)
       params.require(resource_name).permit(*dashboard.permitted_attributes, images: [])
     end    
 

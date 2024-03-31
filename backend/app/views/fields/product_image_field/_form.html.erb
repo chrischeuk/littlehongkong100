@@ -1,0 +1,14 @@
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+
+<% my_array ||= field.data %>
+<% my_array.each do |item| %>
+  <div class="field-unit__field">
+    <input type="text" name="product[images][]", value=<%= item %>>
+  </div>
+  <br/>
+<% end %>
+<div class="field-unit__field">
+  <input type="text" name="product[images][]", value="">
+</div>
