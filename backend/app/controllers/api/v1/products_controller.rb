@@ -3,8 +3,9 @@ class Api::V1::ProductsController < ApplicationController
 
   
     def show_products
-      @output=Product.available_and_not_leased_between(params[:date_from],params[:date_to]).distinct
-        .deep_pluck(:id,:product_name, :images, :items=> [:item_name, :id ])
+      @output=Product.available_and_not_leased_between(params[:date_from],params[:date_to]).select("products.*, items.*")
+        .deep_pluck(:id,:product_name, :images, :item_name )
+        # .deep_pluck(:id,:product_name, :images, :items=> [:item_name] )
       # puts (params[:date_from])
       render json: @output
     end
