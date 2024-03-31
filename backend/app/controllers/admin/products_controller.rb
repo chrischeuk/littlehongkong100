@@ -39,6 +39,10 @@ module Admin
     #     permit(dashboard.permitted_attributes(action_name)).
     #     transform_values { |value| value == "" ? nil : value }
     # end
+    def resource_params
+      params["product"]["images"] = params["product"]["images"].split(' ')
+      params.require(resource_name).permit(*dashboard.permitted_attributes, images: [])
+    end    
 
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
     # for more information

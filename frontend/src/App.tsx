@@ -10,7 +10,7 @@ import Item from "./views/Item";
 
 const App: React.FC = () => {
   return (
-    <>
+    <div className="container mx-auto px-4 py-4">
       <nav>
         <ul>
           <Link to="/">Home</Link>
@@ -21,7 +21,7 @@ const App: React.FC = () => {
         <Route path="/item" element={<Item />} />
         <Route path="/item/:id" element={<Item />} />
       </Routes>
-    </>
+    </div>
   );
 };
 

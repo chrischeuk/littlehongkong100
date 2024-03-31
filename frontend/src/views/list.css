@@ -1,3 +1,7 @@
 .List {
   text-align: center;
 }
+
+.card {
+  container-type: inline-size;
+}

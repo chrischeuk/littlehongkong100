@@ -15,6 +15,7 @@ class ProductDashboard < Administrate::BaseDashboard
     product_name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    images: Field::Text
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -27,6 +28,7 @@ class ProductDashboard < Administrate::BaseDashboard
     brand
     items
     product_name
+    
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -37,6 +39,7 @@ class ProductDashboard < Administrate::BaseDashboard
     items
     product_description
     product_name
+    images
     created_at
     updated_at
   ].freeze
@@ -49,6 +52,7 @@ class ProductDashboard < Administrate::BaseDashboard
     items
     product_description
     product_name
+    images
   ].freeze
 
   # COLLECTION_FILTERS

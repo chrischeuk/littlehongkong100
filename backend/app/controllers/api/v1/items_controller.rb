@@ -6,7 +6,8 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def show_items
-    @output=Item.available_and_not_leased_between(params[:date_from],params[:date_to])
+    @output=Item.available_and_not_leased_between(params[:date_from],params[:date_to]).includes(:product)
+      .deep_pluck(:id,:item_name, :product=> [:product_name, :images])
     # puts (params[:date_from])
     render json: @output
   end

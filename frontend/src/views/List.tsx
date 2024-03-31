@@ -13,6 +13,9 @@ const BACKEND_API_URL =
 type Item = {
   id: string;
   item_name: string;
+  product: {
+    images: string[];
+  };
 };
 function parseParams(date: string | null): Date {
   if (date != null) {
@@ -111,11 +114,12 @@ export default function List() {
       />
       <br />
       <p>{`${startDate} ${endDate}`}</p>
-
-      {items.map((item) => {
-        return (
-          <div key={item.id + item.item_name}>
+      <div className="flex flex-row flex-wrap">
+        {items.map((item) => {
+          return (
             <Link
+              className="card basis-1/3"
+              key={item.id + item.item_name}
               to={`/item/${item.id}`}
               state={{
                 name: item.item_name,
@@ -123,11 +127,14 @@ export default function List() {
                 endDate: endDate,
               }}
             >
-              {item.item_name}
+              <div className=" bg-white-50 p-1  hover:bg-slate-100 m-1">
+                <img src={item.product.images[0]} alt="React Image" />
+                <p>{item.item_name}</p>
+              </div>
             </Link>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
