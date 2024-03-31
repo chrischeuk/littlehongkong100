@@ -114,11 +114,11 @@ export default function List() {
       />
       <br />
       <p>{`${startDate} ${endDate}`}</p>
-      <div className="flex flex-row flex-wrap">
+      <div className="container mx-auto p-6 grid grid-cols-3 gap-4 items-center">
         {items.map((item) => {
           return (
             <Link
-              className="card basis-1/3"
+              className="card  "
               key={item.id + item.item_name}
               to={`/item/${item.id}`}
               state={{
@@ -128,7 +128,11 @@ export default function List() {
               }}
             >
               <div className=" bg-white-50 p-1  hover:bg-slate-100 m-1">
-                <img src={item.product.images[0]} alt="React Image" />
+                <img
+                  src={item.product.images[0]}
+                  alt="React Image"
+                  className="object-fill"
+                />
                 <p>{item.item_name}</p>
               </div>
             </Link>
