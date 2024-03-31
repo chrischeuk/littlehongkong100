@@ -10,12 +10,16 @@ const BACKEND_API_URL =
   import.meta.env.REACT_APP_BACKEND_API_URL ||
   "https://urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev";
 
-type Item = {
+type Product = {
   id: string;
-  item_name: string;
-  product: {
-    images: string[];
-  };
+  product_name: string;
+  images: string[];
+  items: [
+    {
+      id: string;
+      item_name: string;
+    }
+  ];
 };
 function parseParams(date: string | null): Date {
   if (date != null) {
@@ -34,7 +38,7 @@ function convertDateToString(date: Date | null): string {
   return stringOut;
 }
 export default function List() {
-  const [items, updateItems] = React.useState<Item[]>([]);
+  const [products, updateProducts] = React.useState<Product[]>([]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
     null,
     null,
@@ -49,10 +53,10 @@ export default function List() {
   const getContent = async (
     startDate: Date,
     endDate: Date,
-    updateItems: React.Dispatch<React.SetStateAction<Item[]>>
+    updateProducts: React.Dispatch<React.SetStateAction<Product[]>>
   ) => {
     const response = await axios.get(
-      `${BACKEND_API_URL}/api/v1/items/show_items`,
+      `${BACKEND_API_URL}/api/v1/products/show_products`,
       {
         params: {
           date_from: startDate,
@@ -60,7 +64,7 @@ export default function List() {
         },
       }
     );
-    updateItems(response.data);
+    updateProducts(response.data);
   };
 
   useEffect(() => {
@@ -77,7 +81,7 @@ export default function List() {
       });
 
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateItems);
+        getContent(startDate, endDate, updateProducts);
       }
     }
     setFirstLoad(false);
@@ -86,7 +90,7 @@ export default function List() {
   React.useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateItems);
+        getContent(startDate, endDate, updateProducts);
       }
       setSearchParams(
         (prev) => {
@@ -115,27 +119,36 @@ export default function List() {
       <br />
       <p>{`${startDate} ${endDate}`}</p>
       <div className="container mx-auto p-6 grid grid-cols-3 gap-4 items-center">
-        {items.map((item) => {
+        {products.map((product) => {
           return (
-            <Link
-              className="card  "
-              key={item.id + item.item_name}
-              to={`/item/${item.id}`}
-              state={{
-                name: item.item_name,
-                startDate: startDate,
-                endDate: endDate,
-              }}
+            <div
+              key={product.id + product.product_name}
+              className=" bg-white-50 p-1  hover:bg-slate-100 m-1"
             >
-              <div className=" bg-white-50 p-1  hover:bg-slate-100 m-1">
+              <div>
                 <img
-                  src={item.product.images[0]}
+                  src={product.images[0]}
                   alt="React Image"
                   className="object-fill"
                 />
-                <p>{item.item_name}</p>
+                <p>{product.product_name}</p>
               </div>
-            </Link>
+              {product.items.map((item) => {
+                return (
+                  <Link
+                    key={item.id + item.item_name}
+                    to={`/item/${item.id}`}
+                    state={{
+                      name: item.item_name,
+                      startDate: startDate,
+                      endDate: endDate,
+                    }}
+                  >
+                    {item.item_name} <br />
+                  </Link>
+                );
+              })}
+            </div>
           );
         })}
       </div>
