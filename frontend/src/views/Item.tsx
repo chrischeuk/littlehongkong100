@@ -36,7 +36,7 @@ function processResponse(data: any | null): excludedDatesType[] | undefined {
       end: convertUTCToLocalDate(new Date(obj[1])),
     };
   });
-  console.log(data);
+
   return data;
 }
 

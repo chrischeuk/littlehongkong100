@@ -14,13 +14,10 @@ type Product = {
   id: string;
   product_name: string;
   images: string[];
-  items: [
-    {
-      id: string;
-      item_name: string;
-    }
-  ];
+  product_id: string;
+  item_name: string;
 };
+
 function parseParams(date: string | null): Date {
   if (date != null) {
     const dateOut = new Date(0);
@@ -38,7 +35,7 @@ function convertDateToString(date: Date | null): string {
   return stringOut;
 }
 export default function List() {
-  const [products, updateProducts] = React.useState<Product[]>([]);
+  const [products, updateProducts] = React.useState<[Product[]]>([[]]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
     null,
     null,
@@ -53,7 +50,7 @@ export default function List() {
   const getContent = async (
     startDate: Date,
     endDate: Date,
-    updateProducts: React.Dispatch<React.SetStateAction<Product[]>>
+    updateProducts: React.Dispatch<React.SetStateAction<[Product[]]>>
   ) => {
     const response = await axios.get(
       `${BACKEND_API_URL}/api/v1/products/show_products`,
@@ -117,41 +114,44 @@ export default function List() {
         disabledKeyboardNavigation
       />
       <br />
-      <p>{`${startDate} ${endDate}`}</p>
-      <div className="container mx-auto p-6 grid grid-cols-3 gap-4 items-center">
-        {products.map((product) => {
-          return (
-            <div
-              key={product.id + product.product_name}
-              className=" bg-white-50 p-1  hover:bg-slate-100 m-1"
-            >
-              <div>
-                <img
-                  src={product.images[0]}
-                  alt="React Image"
-                  className="object-fill"
-                />
-                <p>{product.product_name}</p>
+
+      {products[0]?.length > 0 && (
+        <div className="container mx-auto p-6 grid grid-cols-3 gap-4 items-center">
+          {products.map((block: Product[]) => {
+            return (
+              <div
+                key={block[0]?.id + block[0]?.product_name}
+                className=" bg-white-50 p-1  hover:bg-slate-100 m-1"
+              >
+                <div>
+                  <img
+                    src={block[0].images[0]}
+                    alt="React Image"
+                    className="object-fill"
+                  />
+                  <p>{block[0].product_name}</p>
+                </div>
+                {block.map((product: Product) => {
+                  return (
+                    <Link
+                      key={product.id + product.item_name}
+                      to={`/item/${product.id}`}
+                      state={{
+                        name: product.item_name,
+                        startDate: startDate,
+                        endDate: endDate,
+                      }}
+                    >
+                      {product.item_name} <br />
+                    </Link>
+                  );
+                })}
               </div>
-              {product.items.map((item) => {
-                return (
-                  <Link
-                    key={item.id + item.item_name}
-                    to={`/item/${item.id}`}
-                    state={{
-                      name: item.item_name,
-                      startDate: startDate,
-                      endDate: endDate,
-                    }}
-                  >
-                    {item.item_name} <br />
-                  </Link>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
+      <p>{`${startDate} ${endDate}`}</p>
     </div>
   );
 }
