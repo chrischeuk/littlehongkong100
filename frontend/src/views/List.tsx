@@ -46,6 +46,7 @@ export default function List() {
   const [startDate, endDate] = dateRange;
   const [searchParams, setSearchParams] = useSearchParams({});
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // const startDate = parseParams(searchParams.get("startDate"));
   // const endDate = parseParams(searchParams.get("endDate"));
@@ -53,8 +54,12 @@ export default function List() {
   const getContent = async (
     startDate: Date,
     endDate: Date,
-    updateProducts: React.Dispatch<React.SetStateAction<[Product[]]>>
+    updateProducts: React.Dispatch<React.SetStateAction<[Product[]]>>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
+    setLoading(() => {
+      return true;
+    });
     const response = await axios.get(
       `${BACKEND_API_URL}/api/v1/products/show_products`,
       {
@@ -65,6 +70,9 @@ export default function List() {
       }
     );
     updateProducts(response.data);
+    setLoading(() => {
+      return false;
+    });
   };
 
   useEffect(() => {
@@ -81,7 +89,7 @@ export default function List() {
       });
 
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateProducts);
+        getContent(startDate, endDate, updateProducts, setLoading);
       }
     }
     setFirstLoad(false);
@@ -90,7 +98,7 @@ export default function List() {
   React.useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateProducts);
+        getContent(startDate, endDate, updateProducts, setLoading);
       }
       setSearchParams(
         (prev) => {
@@ -117,7 +125,9 @@ export default function List() {
         disabledKeyboardNavigation
       />
       <br />
-
+      {loading && (
+        <div className="inline-block m-5 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+      )}
       {products[0]?.length > 0 && (
         <div className="container mx-auto p-6 grid grid-cols-2 gap-4 items-center sm:grid-cols-3">
           {products.map((block: Product[]) => {

@@ -4,10 +4,10 @@ class Api::V1::ProductsController < ApplicationController
   
     def show_products
       @output=Product.available_and_not_leased_between(params[:date_from],params[:date_to]).select("products.*, items.*")
-      .group_by { |d| d[:product_name]  }.values
+      .sort_by{|key,value|key.item_name}.group_by { |d| d[:product_name]  }.values
         # .deep_pluck(:id,:product_name, :images, :items=> [:item_name] )
-      # puts (params[:date_from])
-      render json: @output
+        # puts (params[:date_from])
+        render json: @output
     end
   
 
