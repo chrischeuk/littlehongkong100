@@ -6,6 +6,8 @@ import HelloFromRail from "../components/HelloFromRail";
 import "./list.css";
 import { Link, useSearchParams } from "react-router-dom";
 
+localStorage.theme = "light";
+
 const BACKEND_API_URL =
   import.meta.env.REACT_APP_BACKEND_API_URL ||
   "https://urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev";
@@ -34,6 +36,7 @@ function convertDateToString(date: Date | null): string {
   const stringOut = date?.getTime().toString();
   return stringOut;
 }
+
 export default function List() {
   const [products, updateProducts] = React.useState<[Product[]]>([[]]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
@@ -116,7 +119,7 @@ export default function List() {
       <br />
 
       {products[0]?.length > 0 && (
-        <div className="container mx-auto p-6 grid grid-cols-3 gap-4 items-center">
+        <div className="container mx-auto p-6 grid grid-cols-2 gap-4 items-center sm:grid-cols-3">
           {products.map((block: Product[]) => {
             return (
               <div
@@ -142,7 +145,7 @@ export default function List() {
                         endDate: endDate,
                       }}
                     >
-                      {product.item_name} <br />
+                      {product.item_name}{" "}
                     </Link>
                   );
                 })}

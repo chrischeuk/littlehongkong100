@@ -1,16 +1,15 @@
 import React from "react";
 import "./App.css";
-import axios from "axios";
 
 import "./components/HelloFromRail";
-import HelloFromRail from "./components/HelloFromRail";
+
 import List from "./views/List";
 import { Link, Route, Routes } from "react-router-dom";
 import Item from "./views/Item";
 
 const App: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto px-4 py-4 ">
       <nav>
         <ul>
           <Link to="/">Home</Link>
