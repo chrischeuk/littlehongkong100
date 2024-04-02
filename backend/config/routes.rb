@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get 'items/index', to: 'items#index', :defaults => {:format => "json"}
       get 'items/show_items', to: 'items#show_items', :defaults => {:format => "json"}
       get 'items/show_item/:id', to: 'items#show_item', :defaults => {:format => "json"}
+      get 'items/show_item_serialized/:id', to: 'items#show_item_serialized', :defaults => {:format => "json"}
       get 'products/show_products', to: 'products#show_products', :defaults => {:format => "json"}
       
       

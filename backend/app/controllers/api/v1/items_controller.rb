@@ -21,6 +21,13 @@ class Api::V1::ItemsController < ApplicationController
     render json: @output
   end
 
+  def show_item_serialized
+    @item=Item.first
+    @output = ItemSerializer.new(@item,{include:[:lease_records]}).serializable_hash.to_json
+    render json: @output
+
+  end
+
   
   private
 
