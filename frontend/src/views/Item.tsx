@@ -11,6 +11,12 @@ type excludedDatesType = {
   start: Date;
   end: Date;
 };
+
+type responseType = {
+  date_from: string;
+  date_to: string;
+  product_name: string;
+};
 export function convertUTCToLocalDate(date: Date): Date {
   if (!date) {
     return date;
@@ -30,10 +36,10 @@ type URLSearchParamsType = {
 };
 
 function processResponse(data: any | null): excludedDatesType[] | undefined {
-  data = data.map((obj: Array<Date>): excludedDatesType | null => {
+  data = data.map((obj: responseType): excludedDatesType | null => {
     return {
-      start: convertUTCToLocalDate(new Date(obj[0])),
-      end: convertUTCToLocalDate(new Date(obj[1])),
+      start: convertUTCToLocalDate(new Date(obj.date_from)),
+      end: convertUTCToLocalDate(new Date(obj.date_to)),
     };
   });
 
@@ -63,25 +69,24 @@ export default function Item() {
   // const startDate = cleanParams(searchParams.get("startDate"));
   // const endDate = cleanParams(searchParams.get("endDate"));
   const [startDate, endDate] = dateRange;
-  const [data, setData] = useState<string | null>(null);
+  const [data, setData] = useState<responseType[] | null>(null);
   const [excludedDates, setExcludedDates] =
     useState<Array<excludedDatesType>>();
+
   let location = useLocation();
   // const {startDate,endDate}= location.state
-  const getContent = async (
-    setDate: React.Dispatch<React.SetStateAction<string | null>>
-    // startDate: Date,
-    // endDate: Date
-  ) => {
+
+  const getContent = async () => {
     const response = await axios.get(
       `${BACKEND_API_URL}/api/v1/items/show_item/${id}`
     );
     // console.log(response.data);
+    setData(response.data);
     setExcludedDates(processResponse(response.data));
   };
 
   React.useEffect(() => {
-    getContent(setData);
+    getContent();
     if (startDate !== null && endDate !== null) {
     }
   }, []);
@@ -89,6 +94,8 @@ export default function Item() {
   return (
     <div style={{ textAlign: "center" }}>
       <p>Item {id}</p>
+      <p>{data && data[0].product_name}</p>
+
       <UTCDatePicker
         selectsRange={true}
         startDate={startDate}

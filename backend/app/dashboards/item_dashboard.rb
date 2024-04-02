@@ -15,6 +15,7 @@ class ItemDashboard < Administrate::BaseDashboard
     description: Field::Text,
     discount: Field::Number,
     item_name: Field::String,
+    spec: Field::String,
     brand_name: Field::String,
     product_name: Field::String,
     lease_records: Field::HasMany,
@@ -34,7 +35,7 @@ class ItemDashboard < Administrate::BaseDashboard
     id
     brand_name
     product_name
-    item_name
+    spec
     available_from
     available_to
   ].freeze
@@ -51,6 +52,7 @@ class ItemDashboard < Administrate::BaseDashboard
     brand_name
     product_name    
     item_name
+    spec
     lease_records
     max_days
     price_per_unit
@@ -69,6 +71,7 @@ class ItemDashboard < Administrate::BaseDashboard
     description
     discount
     item_name
+    spec
     lease_records
     max_days
     price_per_unit

@@ -17,7 +17,7 @@ type Product = {
   product_name: string;
   images: string[];
   product_id: string;
-  item_name: string;
+  spec: string;
 };
 
 function parseParams(date: string | null): Date {
@@ -113,7 +113,6 @@ export default function List() {
 
   return (
     <div className="List">
-      <HelloFromRail />
       <UTCDatePicker
         selectsRange={true}
         startDate={startDate}
@@ -147,15 +146,15 @@ export default function List() {
                 {block.map((product: Product) => {
                   return (
                     <Link
-                      key={product.id + product.item_name}
+                      key={product.id + product.spec}
                       to={`/item/${product.id}`}
                       state={{
-                        name: product.item_name,
+                        name: product.spec,
                         startDate: startDate,
                         endDate: endDate,
                       }}
                     >
-                      {product.item_name}{" "}
+                      {product.spec}{" "}
                     </Link>
                   );
                 })}
@@ -164,7 +163,8 @@ export default function List() {
           })}
         </div>
       )}
-      <p>{`${startDate} ${endDate}`}</p>
+      {startDate && endDate && <p className="text-sm">{`${startDate} ${endDate}`}</p>}
+      <HelloFromRail />
     </div>
   );
 }
