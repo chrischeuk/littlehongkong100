@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { start } from "repl";
 import "./UTCDatePicker.css";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export function convertUTCToLocalDate(date: Date | null): Date | null {
   if (!date) {
@@ -47,6 +48,7 @@ type UTCDatePickerProps = {
   inline?: boolean;
   disabledKeyboardNavigation: boolean;
   excludeDateIntervals?: excludedDatesType[] | undefined;
+  placeholderText?: string;
   // setSearchParams: any;
 };
 
@@ -66,9 +68,17 @@ export default function UTCDatePicker({
 }: UTCDatePickerProps) {
   const ExampleCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ value, onClick }, ref) => (
-      <button className="example-custom-input" onClick={onClick} ref={ref}>
-        {value ? value : "pick your date here"}
-      </button>
+      <div className=" drop-shadow-lg ">
+        <button
+          className="p-5 w-96 example-custom-input flex flex-row bg-slate-50"
+          onClick={onClick}
+          ref={ref}
+        >
+          <MagnifyingGlassIcon className="w-6 h-6 mx-3" />
+
+          {value ? value : "Any dates"}
+        </button>
+      </div>
     )
   );
   const today = new Date();

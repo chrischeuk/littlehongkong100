@@ -9,8 +9,8 @@ import Item from "./views/Item";
 
 const App: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-4 ">
-      <nav>
+    <div className="container  ">
+      <nav className=" mx-auto px-3 py-2">
         <ul>
           <Link to="/">Home</Link>
         </ul>

@@ -17,4 +17,7 @@ class Item < ApplicationRecord
   def brand_name
     self.product.brand.brand_name
   end  
+  def images
+    self.product.images
+  end
 end

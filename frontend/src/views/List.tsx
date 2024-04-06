@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import HelloFromRail from "../components/HelloFromRail";
 import "./list.css";
 import { Link, useSearchParams } from "react-router-dom";
+import ListProduct from "../components/ListProduct";
 
 localStorage.theme = "light";
 
@@ -37,6 +38,12 @@ function convertDateToString(date: Date | null): string {
   return stringOut;
 }
 
+function addDays(date: Date, days: number) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 export default function List() {
   const [products, updateProducts] = React.useState<[Product[]]>([[]]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
@@ -52,8 +59,8 @@ export default function List() {
   // const endDate = parseParams(searchParams.get("endDate"));
 
   const getContent = async (
-    startDate: Date,
-    endDate: Date,
+    startDate: Date | null,
+    endDate: Date | null,
     updateProducts: React.Dispatch<React.SetStateAction<[Product[]]>>,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
@@ -91,11 +98,13 @@ export default function List() {
       if (startDate !== null && endDate !== null) {
         getContent(startDate, endDate, updateProducts, setLoading);
       }
+    } else {
+      getContent(null, null, updateProducts, setLoading);
     }
     setFirstLoad(false);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
         getContent(startDate, endDate, updateProducts, setLoading);
@@ -112,58 +121,33 @@ export default function List() {
   }, [dateRange]);
 
   return (
-    <div className="List">
-      <UTCDatePicker
-        selectsRange={true}
+    <div className="List ">
+      <div className="sticky top-0 py-3 bg-white text-center">
+        <UTCDatePicker
+          selectsRange={true}
+          startDate={startDate}
+          endDate={endDate}
+          setDateRange={setDateRange}
+          // setSearchParams={setSearchParams}
+          // withPortal
+          // inline
+          disabledKeyboardNavigation
+        />
+        <br />
+      </div>
+      <div className="text-center">
+        {loading && (
+          <div className=" inline-block m-5 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+        )}
+      </div>
+      <ListProduct
+        products={products}
         startDate={startDate}
         endDate={endDate}
-        setDateRange={setDateRange}
-        // setSearchParams={setSearchParams}
-        // withPortal
-        inline
-        disabledKeyboardNavigation
       />
-      <br />
-      {loading && (
-        <div className="inline-block m-5 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]" />
+      {startDate && endDate && (
+        <p className="text-sm">{`${startDate} ${endDate}`}</p>
       )}
-      {products[0]?.length > 0 && (
-        <div className="container mx-auto p-6 grid grid-cols-2 gap-4 items-center sm:grid-cols-3">
-          {products.map((block: Product[]) => {
-            return (
-              <div
-                key={block[0]?.id + block[0]?.product_name}
-                className=" bg-white-50 p-1  hover:bg-slate-100 m-1"
-              >
-                <div>
-                  <img
-                    src={block[0].images[0]}
-                    alt="React Image"
-                    className="object-fill"
-                  />
-                  <p>{block[0].product_name}</p>
-                </div>
-                {block.map((product: Product) => {
-                  return (
-                    <Link
-                      key={product.id + product.spec}
-                      to={`/item/${product.id}`}
-                      state={{
-                        name: product.spec,
-                        startDate: startDate,
-                        endDate: endDate,
-                      }}
-                    >
-                      {product.spec}{" "}
-                    </Link>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {startDate && endDate && <p className="text-sm">{`${startDate} ${endDate}`}</p>}
       <HelloFromRail />
     </div>
   );

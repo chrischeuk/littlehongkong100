@@ -4,11 +4,7 @@ import UTCDatePicker from "../components/UTCDatePicker";
 import axios from "axios";
 import JSONAPISerializer from "json-api-serializer";
 
-var Serializer = new JSONAPISerializer({
-  convertCase: "kebab-case",
-  unconvertCase: "camelCase",
-  convertCaseCacheSize: 0,
-});
+var Serializer = new JSONAPISerializer();
 Serializer.register("lease_record", {
   id: "id",
 });
@@ -96,30 +92,22 @@ export default function Item() {
   let location = useLocation();
   // const {startDate,endDate}= location.state
 
-  const getContent = async () => {
-    const response = await axios.get(
-      `${BACKEND_API_URL}/api/v1/items/show_item/${id}`
-    );
-    // console.log(response.data);
-    setData(response.data);
-    setExcludedDates(processResponse(response.data));
-  };
   const getSerializedContent = async () => {
     const response = await axios.get(
       `${BACKEND_API_URL}/api/v1/items/show_item_serialized/${id}`
     );
 
     Serializer.deserializeAsync("item", response.data)
-      .then((result) => {
-        console.log(result);
+      .then((result: any) => {
+        setData(result);
+        setExcludedDates(processResponse(result[0].lease_records));
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
 
   React.useEffect(() => {
-    getContent();
     getSerializedContent();
 
     if (startDate !== null && endDate !== null) {
@@ -129,7 +117,6 @@ export default function Item() {
   return (
     <div style={{ textAlign: "center" }}>
       <p>Item {id}</p>
-      <p>{data && data[0].product_name}</p>
 
       <UTCDatePicker
         selectsRange={true}
@@ -143,6 +130,9 @@ export default function Item() {
         excludeDateIntervals={excludedDates}
       />
       {/* <p>{excludedDates}</p> */}
+      {data && <img src={data[0].images[0]} />}
+      <p className="text-xl font-bold">{data && data[0].product_name}</p>
+      <p className="text-lg font-bold text-red-400 ">{data && data[0].spec}</p>
     </div>
   );
 }
