@@ -1,7 +1,6 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { start } from "repl";
 import "./UTCDatePicker.css";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
@@ -50,12 +49,14 @@ type UTCDatePickerProps = {
   excludeDateIntervals?: excludedDatesType[] | undefined;
   placeholderText?: string;
   // setSearchParams: any;
+  available_from?: string;
+  available_to?: string;
 };
 
-type forwardRefProps = {
-  value: React.ReactElement;
-  onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
-};
+// type forwardRefProps = {
+//   value: React.ReactElement;
+//   onClick: React.MouseEventHandler<HTMLButtonElement> | undefined;
+// };
 
 type ButtonProps = React.HTMLProps<HTMLButtonElement>;
 
@@ -63,6 +64,8 @@ export default function UTCDatePicker({
   startDate,
   endDate,
   setDateRange,
+  available_to,
+  available_from,
   // setSearchParams,
   ...props
 }: UTCDatePickerProps) {
@@ -82,7 +85,25 @@ export default function UTCDatePicker({
     )
   );
   const today = new Date();
-  const maxDate = addDate(today);
+  const minDate = () => {
+    if (available_from != undefined) {
+      return new Date(
+        Math.max(today.getTime(), new Date(available_from).getTime())
+      );
+    } else {
+      return today;
+    }
+  };
+
+  const maxDate = () => {
+    if (available_to != undefined) {
+      return new Date(
+        Math.min(addDate(today).getTime(), new Date(available_to).getTime())
+      );
+    } else {
+      return addDate(today);
+    }
+  };
 
   return (
     <DatePicker
@@ -95,8 +116,8 @@ export default function UTCDatePicker({
           convertLocalToUTCDate(update[1]),
         ])
       }
-      minDate={today}
-      maxDate={addDate(today)}
+      minDate={minDate()}
+      maxDate={maxDate()}
       // selectsDisabledDaysInRange
       {...props}
     />

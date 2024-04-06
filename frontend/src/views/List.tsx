@@ -4,7 +4,7 @@ import UTCDatePicker from "../components/UTCDatePicker";
 import "react-datepicker/dist/react-datepicker.css";
 import HelloFromRail from "../components/HelloFromRail";
 import "./list.css";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
 
 localStorage.theme = "light";
@@ -13,12 +13,13 @@ const BACKEND_API_URL =
   import.meta.env.REACT_APP_BACKEND_API_URL ||
   "https://urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev";
 
-type Product = {
+type ProductType = {
   id: string;
   product_name: string;
   images: string[];
   product_id: string;
   spec: string;
+  brand_name: string;
 };
 
 function parseParams(date: string | null): Date {
@@ -38,14 +39,8 @@ function convertDateToString(date: Date | null): string {
   return stringOut;
 }
 
-function addDays(date: Date, days: number) {
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result;
-}
-
 export default function List() {
-  const [products, updateProducts] = React.useState<[Product[]]>([[]]);
+  const [products, updateProducts] = React.useState<[ProductType[]]>([[]]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
     null,
     null,
@@ -61,7 +56,7 @@ export default function List() {
   const getContent = async (
     startDate: Date | null,
     endDate: Date | null,
-    updateProducts: React.Dispatch<React.SetStateAction<[Product[]]>>,
+    updateProducts: React.Dispatch<React.SetStateAction<[ProductType[]]>>,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setLoading(() => {

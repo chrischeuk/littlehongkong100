@@ -31,6 +31,8 @@ type responseType = {
   date_from: string;
   date_to: string;
   product_name: string;
+  available_from: string;
+  available_to: string;
 };
 export function convertUTCToLocalDate(date: Date): Date {
   if (!date) {
@@ -85,7 +87,6 @@ export default function Item() {
   // const endDate = cleanParams(searchParams.get("endDate"));
   const [startDate, endDate] = dateRange;
   const [data, setData] = useState<responseType[] | null>(null);
-  const [serial, setSerial] = useState<responseType[] | null>(null);
   const [excludedDates, setExcludedDates] =
     useState<Array<excludedDatesType>>();
 
@@ -113,7 +114,7 @@ export default function Item() {
     if (startDate !== null && endDate !== null) {
     }
   }, []);
-
+  
   return (
     <div style={{ textAlign: "center" }}>
       <p>Item {id}</p>
@@ -128,6 +129,9 @@ export default function Item() {
         inline
         disabledKeyboardNavigation
         excludeDateIntervals={excludedDates}
+        // minDate={convertUTCToLocalDate(data[0].available_from)}
+        available_from={data && data[0].available_from}
+        available_to={data && data[0].available_to}
       />
       {/* <p>{excludedDates}</p> */}
       {data && <img src={data[0].images[0]} />}
