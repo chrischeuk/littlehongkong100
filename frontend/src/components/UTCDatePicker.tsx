@@ -86,10 +86,11 @@ export default function UTCDatePicker({
   );
   const today = new Date();
   const minDate = () => {
-    if (available_from != undefined) {
-      return new Date(
-        Math.max(today.getTime(), new Date(available_from).getTime())
-      );
+    if (available_from != null) {
+      let available_from_utc =
+        convertUTCToLocalDate(new Date(available_from))?.getTime() ||
+        today.getTime();
+      return new Date(Math.max(today.getTime(), available_from_utc));
     } else {
       return today;
     }
@@ -97,9 +98,10 @@ export default function UTCDatePicker({
 
   const maxDate = () => {
     if (available_to != undefined) {
-      return new Date(
-        Math.min(addDate(today).getTime(), new Date(available_to).getTime())
-      );
+      let available_to_utc =
+        convertUTCToLocalDate(new Date(available_to))?.getTime() ||
+        today.getTime();
+      return new Date(Math.min(addDate(today).getTime(), available_to_utc));
     } else {
       return addDate(today);
     }
