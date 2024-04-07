@@ -7,10 +7,15 @@ type ProductType = {
   product_id: string;
   spec: string;
   brand_name: string;
+  items: ItemType[];
+};
+type ItemType = {
+  id: string;
+  spec: string;
 };
 
 type ListProductProps = {
-  products: [ProductType[]];
+  products: ProductType[];
   startDate: Date | null;
   endDate: Date | null;
 };
@@ -21,40 +26,44 @@ export default function ListProduct({
   endDate,
 }: ListProductProps): any {
   return (
-    products[0]?.length > 0 && (
+    products.length > 0 && (
       <div className="container my-10 mx-auto grid grid-cols-1 gap-4 items-center sm:grid-cols-2 md:grid-cols-3">
-        {products.map((block: ProductType[]) => {
+        {products.map((product: ProductType) => {
           return (
             <div
-              key={block[0]?.id + block[0]?.product_name}
+              key={product?.id + product?.product_name}
               className=" bg-white-50 p-1 flex flex-row sm:flex-col  sm:hover:bg-slate-100"
             >
               <div className="basis-1/2 sm:basis-1">
                 <img
-                  src={block[0].images[0]}
+                  src={product?.images[0]}
                   alt="React Image"
                   className="object-fill"
                 />
               </div>
               <div className="container basis-1/2 place-content-center flex flex-col sm:basis-1 sm:text-center">
                 <p className="font-bold text-2xl pt-2">
-                  {block[0].product_name}
+                  {product.product_name}
                 </p>
-                <p className="font-bold text-sm ">{block[0].brand_name}</p>
+                <p className="font-bold text-sm ">{product.brand_name}</p>
 
                 <div>
-                  {block.map((product: ProductType) => {
+                  {product?.items.length == 0 && <p>not available</p>}
+                  {product?.items.map((item: ItemType) => {
+                    if (!item) {
+                      return <p>not available </p>;
+                    }
                     return (
                       <Link
-                        key={product.id + product.spec}
-                        to={`/item/${product.id}`}
+                        key={item.id + item.spec}
+                        to={`/item/${item.id}`}
                         state={{
-                          name: product.spec,
+                          name: item.spec,
                           startDate: startDate,
                           endDate: endDate,
                         }}
                       >
-                        {product.spec}{" "}
+                        {item.spec}{" "}
                       </Link>
                     );
                   })}

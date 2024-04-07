@@ -6,6 +6,21 @@ import HelloFromRail from "../components/HelloFromRail";
 import "./list.css";
 import { useSearchParams } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
+import JSONAPISerializer from "json-api-serializer";
+
+var Serializer = new JSONAPISerializer();
+Serializer.register("item", {
+  id: "id",
+});
+
+Serializer.register("product", {
+  id: "id",
+  relationships: {
+    items: {
+      type: "item",
+    },
+  },
+});
 
 localStorage.theme = "light";
 
@@ -13,6 +28,10 @@ const BACKEND_API_URL =
   import.meta.env.REACT_APP_BACKEND_API_URL ||
   "https://urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev";
 
+type ItemType = {
+  id: string;
+  spec: string;
+};
 type ProductType = {
   id: string;
   product_name: string;
@@ -20,6 +39,7 @@ type ProductType = {
   product_id: string;
   spec: string;
   brand_name: string;
+  items: ItemType[];
 };
 
 function parseParams(date: string | null): Date {
@@ -40,7 +60,7 @@ function convertDateToString(date: Date | null): string {
 }
 
 export default function List() {
-  const [products, updateProducts] = React.useState<[ProductType[]]>([[]]);
+  const [products, updateProducts] = React.useState<ProductType[]>([]);
   const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
     null,
     null,
@@ -53,17 +73,36 @@ export default function List() {
   // const startDate = parseParams(searchParams.get("startDate"));
   // const endDate = parseParams(searchParams.get("endDate"));
 
-  const getContent = async (
-    startDate: Date | null,
-    endDate: Date | null,
-    updateProducts: React.Dispatch<React.SetStateAction<[ProductType[]]>>,
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  ) => {
+  // const getContent = async (
+  //   startDate: Date | null,
+  //   endDate: Date | null,
+  //   updateProducts: React.Dispatch<React.SetStateAction<[ProductType[]]>>,
+  //   setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  // ) => {
+  //   setLoading(() => {
+  //     return true;
+  //   });
+  //   const response = await axios.get(
+  //     `${BACKEND_API_URL}/api/v1/products/show_products`,
+  //     {
+  //       params: {
+  //         date_from: startDate,
+  //         date_to: endDate,
+  //       },
+  //     }
+  //   );
+  //   // updateProducts(response.data);
+  //   setLoading(() => {
+  //     return false;
+  //   });
+  // };
+
+  const getSerializedContent = async () => {
     setLoading(() => {
       return true;
     });
     const response = await axios.get(
-      `${BACKEND_API_URL}/api/v1/products/show_products`,
+      `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
       {
         params: {
           date_from: startDate,
@@ -71,10 +110,19 @@ export default function List() {
         },
       }
     );
-    updateProducts(response.data);
-    setLoading(() => {
-      return false;
-    });
+    Serializer.deserializeAsync("product", response.data)
+      .then((result: any) => {
+        console.log(result);
+        updateProducts(result);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(() => {
+          return false;
+        });
+      });
   };
 
   useEffect(() => {
@@ -91,10 +139,12 @@ export default function List() {
       });
 
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateProducts, setLoading);
+        // getContent(startDate, endDate, updateProducts, setLoading);
+        getSerializedContent();
       }
     } else {
-      getContent(null, null, updateProducts, setLoading);
+      // getContent(null, null, updateProducts, setLoading);
+      getSerializedContent();
     }
     setFirstLoad(false);
   }, []);
@@ -102,7 +152,8 @@ export default function List() {
   useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
-        getContent(startDate, endDate, updateProducts, setLoading);
+        // getContent(startDate, endDate, updateProducts, setLoading);
+        getSerializedContent();
       }
       setSearchParams(
         (prev) => {
