@@ -70,33 +70,6 @@ export default function List() {
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // const startDate = parseParams(searchParams.get("startDate"));
-  // const endDate = parseParams(searchParams.get("endDate"));
-
-  // const getContent = async (
-  //   startDate: Date | null,
-  //   endDate: Date | null,
-  //   updateProducts: React.Dispatch<React.SetStateAction<[ProductType[]]>>,
-  //   setLoading: React.Dispatch<React.SetStateAction<boolean>>
-  // ) => {
-  //   setLoading(() => {
-  //     return true;
-  //   });
-  //   const response = await axios.get(
-  //     `${BACKEND_API_URL}/api/v1/products/show_products`,
-  //     {
-  //       params: {
-  //         date_from: startDate,
-  //         date_to: endDate,
-  //       },
-  //     }
-  //   );
-  //   // updateProducts(response.data);
-  //   setLoading(() => {
-  //     return false;
-  //   });
-  // };
-
   const getSerializedContent = async () => {
     setLoading(() => {
       return true;
@@ -129,7 +102,8 @@ export default function List() {
     if (
       firstLoad &&
       searchParams.get("startDate") !== null &&
-      searchParams.get("endDate") !== null
+      searchParams.get("endDate") !== null &&
+      searchParams.get("startDate") != "0"
     ) {
       setDateRange(() => {
         return [
@@ -139,11 +113,9 @@ export default function List() {
       });
 
       if (startDate !== null && endDate !== null) {
-        // getContent(startDate, endDate, updateProducts, setLoading);
         getSerializedContent();
       }
     } else {
-      // getContent(null, null, updateProducts, setLoading);
       getSerializedContent();
     }
     setFirstLoad(false);
@@ -152,17 +124,16 @@ export default function List() {
   useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
-        // getContent(startDate, endDate, updateProducts, setLoading);
         getSerializedContent();
+        setSearchParams(
+          (prev) => {
+            prev.set("startDate", convertDateToString(startDate));
+            prev.set("endDate", convertDateToString(endDate));
+            return prev;
+          },
+          { replace: true }
+        );
       }
-      setSearchParams(
-        (prev) => {
-          prev.set("startDate", convertDateToString(startDate));
-          prev.set("endDate", convertDateToString(endDate));
-          return prev;
-        },
-        { replace: true }
-      );
     }
   }, [dateRange]);
 
@@ -174,7 +145,6 @@ export default function List() {
           startDate={startDate}
           endDate={endDate}
           setDateRange={setDateRange}
-          // setSearchParams={setSearchParams}
           // withPortal
           // inline
           disabledKeyboardNavigation

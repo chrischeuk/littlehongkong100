@@ -27,5 +27,5 @@ export default function HelloFromRail(): any {
     fetchContent(updateContent);
   }, []);
 
-  return <p className="text-sm text-right p-2">{content}</p>;
+  return <p className="text-sm text-center p-2">{content}</p>;
 }

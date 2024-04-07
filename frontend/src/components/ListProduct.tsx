@@ -48,23 +48,24 @@ export default function ListProduct({
                 <p className="font-bold text-sm ">{product.brand_name}</p>
 
                 <div>
-                  {product?.items.length == 0 && <p>not available</p>}
+                  {product?.items.length == 0 && (
+                    <p className="text-sm text-blue-600">not available</p>
+                  )}
                   {product?.items.map((item: ItemType) => {
-                    if (!item) {
-                      return <p>not available </p>;
-                    }
                     return (
-                      <Link
-                        key={item.id + item.spec}
-                        to={`/item/${item.id}`}
-                        state={{
-                          name: item.spec,
-                          startDate: startDate,
-                          endDate: endDate,
-                        }}
-                      >
-                        {item.spec}{" "}
-                      </Link>
+                      <button className="rounded-full bg-blue-500 py-1 m-1 shadow-sm">
+                        <Link
+                          key={item.id + item.spec}
+                          to={`/item/${item.id}`}
+                          state={{
+                            name: item.spec,
+                            startDate: startDate,
+                            endDate: endDate,
+                          }}
+                        >
+                          <p className="text-sm text-white">{item.spec} </p>
+                        </Link>
+                      </button>
                     );
                   })}
                 </div>
