@@ -19,7 +19,7 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     renter_name: Field::String,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    item_name: Field::String,
+    spec: Field::String,
     product_name: Field::String,
     brand_name: Field::String
   }.freeze
@@ -35,7 +35,7 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     date_to
     brand_name
     product_name
-    item_name
+    spec
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -47,7 +47,7 @@ class LeaseRecordDashboard < Administrate::BaseDashboard
     discount
     brand_name
     product_name    
-    item_name
+    spec
     price_per_unit
     price_total
     renter_email

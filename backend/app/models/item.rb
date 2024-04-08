@@ -20,4 +20,11 @@ class Item < ApplicationRecord
   def images
     self.product.images
   end
+  def available_and_not_leased_between(params)
+     self.lease_records.has_lease_record_between(params[:date_from],params[:date_to]).length==0 && 
+     self.available_from <= params[:date_from].to_date &&
+     self.available_to >= params[:date_to].to_date
+
+
+  end
 end

@@ -12,6 +12,7 @@ type ProductType = {
 type ItemType = {
   id: string;
   spec: string;
+  available: boolean;
 };
 
 type ListProductProps = {
@@ -53,9 +54,13 @@ export default function ListProduct({
                   )}
                   {product?.items.map((item: ItemType) => {
                     return (
-                      <button className="rounded-full bg-blue-500 py-1 m-1 shadow-sm">
+                      <button
+                        key={item.id + item.spec}
+                        className={`rounded-full ${
+                          item.available ? "bg-blue-500" : "bg-slate-300"
+                        } py-1 m-1 shadow-sm`}
+                      >
                         <Link
-                          key={item.id + item.spec}
                           to={`/item/${item.id}`}
                           state={{
                             name: item.spec,

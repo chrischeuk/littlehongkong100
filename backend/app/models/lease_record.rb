@@ -31,8 +31,8 @@ class LeaseRecord < ApplicationRecord
   }
 
   validates_with DuplicationValidator
-  def item_name
-    self.item.item_name
+  def spec
+    self.item.spec
   end
   def product_name
     self.item.product.product_name

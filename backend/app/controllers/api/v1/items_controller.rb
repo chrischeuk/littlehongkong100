@@ -23,7 +23,7 @@ class Api::V1::ItemsController < ApplicationController
 
   def show_item_serialized
     @item=Item.where(id:params[:id])
-    @output = ItemSerializer.new(@item,{include:[:lease_records]}).serializable_hash.to_json
+    @output = ItemSerializer.new(@item,{include:[:lease_records],params:{to_include_lease_records: true }}).serializable_hash.to_json
     render json: @output
 
   end
