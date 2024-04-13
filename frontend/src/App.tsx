@@ -6,8 +6,6 @@ import "./components/HelloFromRail";
 import List from "./views/List";
 import { Link, Route, Routes } from "react-router-dom";
 import Item from "./views/Item";
-import ShoppingCart from "./components/ShoppingCart";
-import Cart from "./views/Cart";
 
 const App: React.FC = () => {
   return (
@@ -16,15 +14,12 @@ const App: React.FC = () => {
         <ul>
           <Link to="/">Home</Link>
         </ul>
-        <ul>
-          <ShoppingCart />
-        </ul>
+        <ul></ul>
       </nav>
       <Routes>
         <Route path="/" element={<List />} />
         <Route path="/item" element={<Item />} />
         <Route path="/item/:id" element={<Item />} />
-        <Route path="/cart" element={<Cart />} />
       </Routes>
     </div>
   );

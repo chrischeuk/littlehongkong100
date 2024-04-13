@@ -92,7 +92,6 @@ export default function Item() {
   const [data, setData] = useState<responseType[] | null>(null);
   const [excludedDates, setExcludedDates] =
     useState<Array<excludedDatesType>>();
-  const [cart, setCart] = useLocalStorageState<CartProps>("cart", {});
 
   let location = useLocation();
   // const {startDate,endDate}= location.state
@@ -111,15 +110,6 @@ export default function Item() {
         console.log(error);
       });
   };
-
-  const addToCart = (product: ProductType): void => {
-    setCart((prevCart) => ({
-      ...prevCart,
-      [product.id]: { ...product, startDate: startDate, endDate: endDate },
-    }));
-  };
-  const isInCart = (productId: number): boolean =>
-    Object.keys(cart || {}).includes(productId.toString());
 
   React.useEffect(() => {
     getSerializedContent();
@@ -158,15 +148,7 @@ export default function Item() {
           endDate &&
           `${formatter.format(startDate)} - ${formatter.format(endDate)}`}
       </p>
-      {data && (
-        <button
-          className="bg-slate-100"
-          disabled={isInCart(data[0].id)}
-          onClick={() => addToCart(data[0])}
-        >
-          Add to Cart
-        </button>
-      )}
+
       {data && <img src={data[0].images[0]} />}
       <p className="text-xl font-bold">{data && data[0].product_name}</p>
       <p className="text-lg font-bold text-red-400 ">{data && data[0].spec}</p>
