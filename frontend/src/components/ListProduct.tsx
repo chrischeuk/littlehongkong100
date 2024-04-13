@@ -1,14 +1,7 @@
 import { Link } from "react-router-dom";
+import { ProductType } from "../views/List";
 
-type ProductType = {
-  id: string;
-  product_name: string;
-  images: string[];
-  product_id: string;
-  spec: string;
-  brand_name: string;
-  items: ItemType[];
-};
+
 type ItemType = {
   id: string;
   spec: string;
@@ -62,6 +55,7 @@ export default function ListProduct({
                       >
                         <Link
                           to={`/item/${item.id}`}
+                          target="_blank"
                           state={{
                             name: item.spec,
                             startDate: startDate,

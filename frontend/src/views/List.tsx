@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import UTCDatePicker from "../components/UTCDatePicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,6 +7,7 @@ import "./list.css";
 import { useSearchParams } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
 import JSONAPISerializer from "json-api-serializer";
+import Loading from "../components/Loading";
 
 var Serializer = new JSONAPISerializer();
 Serializer.register("item", {
@@ -31,8 +32,9 @@ const BACKEND_API_URL =
 type ItemType = {
   id: string;
   spec: string;
+  available: boolean;
 };
-type ProductType = {
+export type ProductType = {
   id: string;
   product_name: string;
   images: string[];
@@ -69,34 +71,101 @@ export default function List() {
   const [searchParams, setSearchParams] = useSearchParams({});
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
+  const [index, setIndex] = useState(2);
+  const loaderRef = useRef(null);
+  const [reachedTheEnd, setReachedTheEnd] = useState(false);
 
   const getSerializedContent = async () => {
-    setLoading(() => {
-      return true;
-    });
-    const response = await axios.get(
-      `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
-      {
-        params: {
-          date_from: startDate,
-          date_to: endDate,
-        },
-      }
-    );
-    Serializer.deserializeAsync("product", response.data)
-      .then((result: any) => {
-        console.log(result);
-        updateProducts(result);
-      })
-      .catch((error: any) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setLoading(() => {
-          return false;
+    console.log("getSerializedContent run");
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
+        {
+          params: {
+            date_from: startDate,
+            date_to: endDate,
+            page: 1,
+          },
+        }
+      );
+      Serializer.deserializeAsync("product", response.data)
+        .then((result: any) => {
+          // console.log(result);
+          updateProducts(result);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      });
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+    }
   };
+
+  const fetchData = useCallback(async () => {
+    if (loading || reachedTheEnd) return;
+
+    setLoading(() => true);
+
+    try {
+      const response = await axios.get(
+        `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
+        {
+          params: {
+            date_from: startDate,
+            date_to: endDate,
+            page: index,
+          },
+        }
+      );
+      console.log("fetchdata " + index);
+      if (response.data?.data?.length == 0) {
+        setReachedTheEnd(true);
+      } else {
+        Serializer.deserializeAsync("product", response.data)
+          .then((result: any) => {
+            updateProducts((prevItems) => [...prevItems, ...result]);
+          })
+          .catch((error: any) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setLoading(() => false);
+          });
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading(() => false);
+    }
+
+    setIndex((prevIndex) => prevIndex + 1);
+
+    setLoading(() => false);
+  }, [index, loading]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      const target = entries[0];
+      if (target.isIntersecting) {
+        fetchData();
+        console.log("target isIntersecting");
+      }
+    });
+
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [fetchData]);
 
   useEffect(() => {
     if (
@@ -124,6 +193,10 @@ export default function List() {
   useEffect(() => {
     if (!firstLoad) {
       if (startDate !== null && endDate !== null) {
+        setReachedTheEnd(false);
+        setIndex(2);
+        updateProducts(() => []);
+        // window.scrollTo({ top: 0, behavior: "smooth" });
         getSerializedContent();
         setSearchParams(
           (prev) => {
@@ -139,7 +212,7 @@ export default function List() {
 
   return (
     <div className="List ">
-      <div className="sticky top-0 py-3 bg-white text-center">
+      <div className="sticky top-0 py-3 bg-white text-center w-full">
         <UTCDatePicker
           selectsRange={true}
           startDate={startDate}
@@ -151,16 +224,15 @@ export default function List() {
         />
         <br />
       </div>
-      <div className="text-center">
-        {loading && (
-          <div className=" inline-block m-5 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]" />
-        )}
-      </div>
+
       <ListProduct
         products={products}
         startDate={startDate}
         endDate={endDate}
       />
+      <div className="text-center" ref={loaderRef}>
+        {loading && <Loading />}
+      </div>
       {startDate && endDate && (
         <p className="text-sm">{`${startDate} ${endDate}`}</p>
       )}

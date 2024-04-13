@@ -262,6 +262,7 @@ DEPENDENCIES
   deep_pluck
   jbuilder (~> 2.11)
   jsonapi-serializer
+  kaminari
   listen (~> 3.7)
   pg (>= 0.18, < 2.0)
   pry

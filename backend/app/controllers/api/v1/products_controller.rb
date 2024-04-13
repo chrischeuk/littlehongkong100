@@ -16,11 +16,11 @@ class Api::V1::ProductsController < ApplicationController
       if params[:date_from]!=nil && params[:date_to] != nil
         # @output=Product.includes(:brand, {items:[:lease_records]}).order('product_name ASC')
         @available_item_ids= Product.joins(:brand).available_and_not_leased_between(params[:date_from],params[:date_to]).pluck("items.id")
-        @output=Product.includes(:brand, {items:[:lease_records]}).order('product_name ASC').first(10)
+        @output=Product.includes(:brand, {items:[:lease_records]}).order('product_name ASC').page(params[:page])
         # @output = ProductSerializer.new(@output).serializable_hash.to_json
         @output = ProductSerializer.new(@output,{include:[:items], params: { date_from: params[:date_from], date_to: params[:date_to], available_item_ids: @available_item_ids, to_include_lease_records: false }}).serializable_hash.to_json
       else
-        @output=Product.all.order('product_name ASC').first(10)
+        @output=Product.all.order('product_name ASC').page(params[:page])
         @output = ProductSerializer.new(@output,{include:[:items], params: {show_lease_records:false}}).serializable_hash.to_json
       end
         render json: @output
