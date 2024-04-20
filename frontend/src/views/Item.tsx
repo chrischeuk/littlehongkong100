@@ -36,6 +36,8 @@ type responseType = {
   product_name: string;
   available_from: string;
   available_to: string;
+  images: string[];
+  spec: string;
 };
 export function convertUTCToLocalDate(date: Date): Date {
   if (!date) {
@@ -50,10 +52,10 @@ export function convertUTCToLocalDate(date: Date): Date {
   return dateOut;
 }
 
-type URLSearchParamsType = {
-  startDate: string;
-  endDate: string;
-};
+// type URLSearchParamsType = {
+//   startDate: string;
+//   endDate: string;
+// };
 
 function processResponse(data: any | null): excludedDatesType[] | undefined {
   data = data.map((obj: responseType): excludedDatesType | null => {
@@ -66,14 +68,14 @@ function processResponse(data: any | null): excludedDatesType[] | undefined {
   return data;
 }
 
-function cleanParams(date: string | null): Date | null {
-  if (date == null) {
-    return null;
-  }
+// function cleanParams(date: string | null): Date | null {
+//   if (date == null) {
+//     return null;
+//   }
 
-  const dateOut = new Date(date);
-  return dateOut;
-}
+//   const dateOut = new Date(date);
+//   return dateOut;
+// }
 
 export default function Item() {
   const { id } = useParams();
@@ -81,10 +83,10 @@ export default function Item() {
     null,
     null,
   ]);
-  const [searchParams, setSearchParams] = useSearchParams({
-    startDate: "",
-    endDate: "",
-  });
+  // const [searchParams, setSearchParams] = useSearchParams({
+  //   startDate: "",
+  //   endDate: "",
+  // });
 
   // const startDate = cleanParams(searchParams.get("startDate"));
   // const endDate = cleanParams(searchParams.get("endDate"));
@@ -93,7 +95,7 @@ export default function Item() {
   const [excludedDates, setExcludedDates] =
     useState<Array<excludedDatesType>>();
 
-  let location = useLocation();
+  // let location = useLocation();
   // const {startDate,endDate}= location.state
 
   const getSerializedContent = async () => {
@@ -138,8 +140,8 @@ export default function Item() {
         disabledKeyboardNavigation
         excludeDateIntervals={excludedDates}
         // minDate={convertUTCToLocalDate(data[0].available_from)}
-        available_from={data && data[0].available_from}
-        available_to={data && data[0].available_to}
+        available_from={data ? data[0].available_from : ""}
+        available_to={data ? data[0].available_to : ""}
       />
       {/* <p>{excludedDates}</p> */}
       <br />

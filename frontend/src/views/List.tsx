@@ -12,6 +12,15 @@ import Loading from "../components/Loading";
 var Serializer = new JSONAPISerializer();
 Serializer.register("item", {
   id: "id",
+  relationships: {
+    lease_records: {
+      type: "lease_record",
+    },
+  },
+});
+
+Serializer.register("lease_record", {
+  id: "id",
 });
 
 Serializer.register("product", {
@@ -34,6 +43,7 @@ type ItemType = {
   spec: string;
   available: boolean;
 };
+
 export type ProductType = {
   id: string;
   product_name: string;
@@ -89,6 +99,8 @@ export default function List() {
           },
         }
       );
+
+      // console.log(response.data);
       Serializer.deserializeAsync("product", response.data)
         .then((result: any) => {
           // console.log(result);
@@ -108,9 +120,7 @@ export default function List() {
 
   const fetchData = useCallback(async () => {
     if (loading || reachedTheEnd) return;
-
     setLoading(() => true);
-
     try {
       const response = await axios.get(
         `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
@@ -123,43 +133,39 @@ export default function List() {
         }
       );
       console.log("fetchdata " + index);
-      if (response.data?.data?.length == 0) {
-        setReachedTheEnd(true);
-      } else {
-        Serializer.deserializeAsync("product", response.data)
-          .then((result: any) => {
-            updateProducts((prevItems) => [...prevItems, ...result]);
-          })
-          .catch((error: any) => {
-            console.log(error);
-          })
-          .finally(() => {
-            setLoading(() => false);
-          });
+      setIndex((prevIndex) => prevIndex + 1);
+      Serializer.deserializeAsync("product", response.data)
+        .then((result: any) => {
+          updateProducts((prevItems) => [...prevItems, ...result]);
+        })
+        .catch((error: any) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(() => false);
+        });
+      if (!response.data?.meta?.has_more_pages) {
+        setReachedTheEnd(() => true);
       }
     } catch (err) {
       console.log(err);
+      setReachedTheEnd(() => true);
       setLoading(() => false);
     }
-
-    setIndex((prevIndex) => prevIndex + 1);
-
     setLoading(() => false);
   }, [index, loading]);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const target = entries[0];
-      if (target.isIntersecting) {
+      if (target.isIntersecting && !firstLoad && !loading) {
         fetchData();
         console.log("target isIntersecting");
       }
     });
-
     if (loaderRef.current) {
       observer.observe(loaderRef.current);
     }
-
     return () => {
       if (loaderRef.current) {
         observer.unobserve(loaderRef.current);
@@ -196,7 +202,6 @@ export default function List() {
         setReachedTheEnd(false);
         setIndex(2);
         updateProducts(() => []);
-        // window.scrollTo({ top: 0, behavior: "smooth" });
         getSerializedContent();
         setSearchParams(
           (prev) => {
@@ -212,17 +217,16 @@ export default function List() {
 
   return (
     <div className="List ">
-      <div className="sticky top-0 py-3 bg-white text-center w-full">
+      <div className="sticky top-0  bg-white text-center w-full ">
         <UTCDatePicker
           selectsRange={true}
           startDate={startDate}
           endDate={endDate}
           setDateRange={setDateRange}
-          // withPortal
+          withPortal
           // inline
           disabledKeyboardNavigation
         />
-        <br />
       </div>
 
       <ListProduct

@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./UTCDatePicker.css";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon, AdjustmentsVerticalIcon} from "@heroicons/react/24/solid";
 
 export function convertUTCToLocalDate(date: Date | null): Date | null {
   if (!date) {
@@ -71,16 +71,20 @@ export default function UTCDatePicker({
 }: UTCDatePickerProps) {
   const ExampleCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ value, onClick }, ref) => (
-      <div className=" drop-shadow-lg ">
+      <div className=" drop-shadow-lg flex flex-row justify-center items-center mx-3">
         <button
-          className="p-5 w-96 example-custom-input flex flex-row bg-slate-50"
+          className="m-3 p-5 w-5/6 example-custom-input bg-slate-50 sm:w-2/6"
           onClick={onClick}
           ref={ref}
         >
-          <MagnifyingGlassIcon className="w-6 h-6 mx-3" />
-
-          {value ? value : "Any dates"}
+          <div className=" flex flex-row">
+            <MagnifyingGlassIcon className="w-6 h-6 mx-3" />
+            <p> {value ? value : "Any dates"}</p>
+          </div>
         </button>
+        <div className=" bg-slate-100 m-5 w-11 h-11 rounded-full flex justify-center flex-shrink-0">
+          <AdjustmentsVerticalIcon className="w-5"/>
+        </div>
       </div>
     )
   );
@@ -107,11 +111,20 @@ export default function UTCDatePicker({
     }
   };
 
+  const handleCalendarOpen = () => {
+    document.addEventListener('touchstart', (event: TouchEvent) => {
+        event.stopPropagation();
+    }, true);
+};
+
   return (
     <DatePicker
       startDate={convertUTCToLocalDate(startDate)}
       endDate={convertUTCToLocalDate(endDate)}
       customInput={<ExampleCustomInput />}
+      onCalendarOpen={handleCalendarOpen}
+
+
       onChange={(update: [Date, Date]) =>
         setDateRange([
           convertLocalToUTCDate(update[0]),

@@ -26,13 +26,13 @@ export default function ListProduct({
           return (
             <div
               key={product?.id + product?.product_name}
-              className=" bg-white-50 p-1 flex flex-row sm:flex-col  sm:hover:bg-slate-100"
+              className=" bg-white-50 flex flex-row sm:flex-col p-2 sm:hover:border-slate-100 sm:hover:border-4"
             >
               <div className="basis-1/2 sm:basis-1">
                 <img
                   src={product?.images[0]}
                   alt="React Image"
-                  className="object-fill"
+                  className="object-fill sm:hover:scale-105"
                 />
               </div>
               <div className="container basis-1/2 place-content-center flex flex-col sm:basis-1 sm:text-center">
