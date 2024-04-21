@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ProductType } from "../views/List";
-
+import { convertDateToString } from "../utilities/TimeUtil";
 
 type ItemType = {
   id: string;
@@ -43,7 +43,7 @@ export default function ListProduct({
 
                 <div>
                   {product?.items.length == 0 && (
-                    <p className="text-sm text-blue-600">not available</p>
+                    <p className="text-sm text-blue-500">not available</p>
                   )}
                   {product?.items.map((item: ItemType) => {
                     return (
@@ -54,7 +54,9 @@ export default function ListProduct({
                         } py-1 m-1 shadow-sm`}
                       >
                         <Link
-                          to={`/item/${item.id}`}
+                          to={`/item/${item.id}?startDate=${convertDateToString(
+                            startDate
+                          )}&endDate=${convertDateToString(endDate)}`}
                           target="_blank"
                           state={{
                             name: item.spec,

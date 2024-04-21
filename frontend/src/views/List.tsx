@@ -8,6 +8,8 @@ import { useSearchParams } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
 import JSONAPISerializer from "json-api-serializer";
 import Loading from "../components/Loading";
+import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
+import { convertDateToString } from "../utilities/TimeUtil";
 
 var Serializer = new JSONAPISerializer();
 Serializer.register("item", {
@@ -62,13 +64,6 @@ function parseParams(date: string | null): Date {
   } else {
     return new Date(0);
   }
-}
-function convertDateToString(date: Date | null): string {
-  if (date == null) {
-    return "";
-  }
-  const stringOut = date?.getTime().toString();
-  return stringOut;
 }
 
 export default function List() {
@@ -186,7 +181,6 @@ export default function List() {
           parseParams(searchParams.get("endDate")),
         ];
       });
-
       if (startDate !== null && endDate !== null) {
         getSerializedContent();
       }
@@ -217,16 +211,21 @@ export default function List() {
 
   return (
     <div className="List ">
-      <div className="sticky top-0  bg-white text-center w-full ">
-        <UTCDatePicker
-          selectsRange={true}
-          startDate={startDate}
-          endDate={endDate}
-          setDateRange={setDateRange}
-          withPortal
-          // inline
-          disabledKeyboardNavigation
-        />
+      <div className="sticky top-0  bg-white text-center w-full flex items-center justify-center">
+        <div className="basis-3/4 sm:basis-2/4">
+          <UTCDatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            setDateRange={setDateRange}
+            withPortal
+            // inline
+            disabledKeyboardNavigation
+          />
+        </div>
+        <div className=" bg-slate-100  m-5 w-11 h-11 rounded-full flex justify-center flex-shrink-0">
+          <AdjustmentsVerticalIcon className="w-5" />
+        </div>
       </div>
 
       <ListProduct

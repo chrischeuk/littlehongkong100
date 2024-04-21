@@ -126,8 +126,11 @@ export default function Item() {
     day: "numeric",
   });
   return (
-    <div style={{ textAlign: "center" }}>
-      <p>Item {id}</p>
+    <div className="flex flex-col items-center">
+      {/* <p>Item {id}</p> */}
+      <p className="text-3xl font-bold">{data && data[0].product_name}</p>
+      <p className="text-lg font-bold text-blue-500 ">{data && data[0].spec}</p>
+      {data && <img className="" src={data[0].images[0]} />}
 
       <UTCDatePicker
         selectsRange={true}
@@ -135,8 +138,8 @@ export default function Item() {
         endDate={endDate}
         setDateRange={setDateRange}
         // setSearchParams={setSearchParams}
-        // withPortal
-        inline
+        withPortal
+        // inline
         disabledKeyboardNavigation
         excludeDateIntervals={excludedDates}
         // minDate={convertUTCToLocalDate(data[0].available_from)}
@@ -150,10 +153,6 @@ export default function Item() {
           endDate &&
           `${formatter.format(startDate)} - ${formatter.format(endDate)}`}
       </p>
-
-      {data && <img src={data[0].images[0]} />}
-      <p className="text-xl font-bold">{data && data[0].product_name}</p>
-      <p className="text-lg font-bold text-red-400 ">{data && data[0].spec}</p>
     </div>
   );
 }

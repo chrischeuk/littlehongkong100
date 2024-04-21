@@ -71,20 +71,21 @@ export default function UTCDatePicker({
 }: UTCDatePickerProps) {
   const ExampleCustomInput = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ value, onClick }, ref) => (
-      <div className=" drop-shadow-lg flex flex-row justify-center items-center mx-3">
+      <div className=" drop-shadow-lg mx-3 ">
+        {/* <p className="bg-slate-50"> hello</p> */}
         <button
-          className="m-3 p-5 w-5/6 example-custom-input bg-slate-50 sm:w-2/6"
+          className="m-3 p-5 w-full bg-slate-50 "
           onClick={onClick}
           ref={ref}
         >
-          <div className=" flex flex-row">
+          <div className="flex">
             <MagnifyingGlassIcon className="w-6 h-6 mx-3" />
             <p> {value ? value : "Any dates"}</p>
           </div>
         </button>
-        <div className=" bg-slate-100 m-5 w-11 h-11 rounded-full flex justify-center flex-shrink-0">
+        {/* <div className=" bg-slate-100 m-5 w-11 h-11 rounded-full flex justify-center flex-shrink-0">
           <AdjustmentsVerticalIcon className="w-5"/>
-        </div>
+        </div> */}
       </div>
     )
   );
