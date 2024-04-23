@@ -6,6 +6,7 @@ import JSONAPISerializer from "json-api-serializer";
 import { ProductType } from "./List";
 import useLocalStorageState from "use-local-storage-state";
 import { CartProps } from "../components/ShoppingCart";
+import { useGetDateFromSearchParams } from "../hooks/useGetDateFromSearchParams";
 
 var Serializer = new JSONAPISerializer();
 Serializer.register("lease_record", {
@@ -72,17 +73,17 @@ function processResponse(data: any | null): excludedDatesType[] | undefined {
 //   if (date == null) {
 //     return null;
 //   }
-
 //   const dateOut = new Date(date);
 //   return dateOut;
 // }
 
 export default function Item() {
   const { id } = useParams();
-  const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
-    null,
-    null,
-  ]);
+  const [dateRange, setDateRange] = useGetDateFromSearchParams();
+  // const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
+  //   null,
+  //   null,
+  // ]);
   // const [searchParams, setSearchParams] = useSearchParams({
   //   startDate: "",
   //   endDate: "",
@@ -94,9 +95,6 @@ export default function Item() {
   const [data, setData] = useState<responseType[] | null>(null);
   const [excludedDates, setExcludedDates] =
     useState<Array<excludedDatesType>>();
-
-  // let location = useLocation();
-  // const {startDate,endDate}= location.state
 
   const getSerializedContent = async () => {
     const response = await axios.get(

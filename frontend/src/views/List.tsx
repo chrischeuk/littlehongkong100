@@ -10,6 +10,7 @@ import JSONAPISerializer from "json-api-serializer";
 import Loading from "../components/Loading";
 import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
 import { convertDateToString } from "../utilities/TimeUtil";
+import useInfiniteLoading from "../hooks/useInfiniteLoading";
 
 var Serializer = new JSONAPISerializer();
 Serializer.register("item", {
@@ -150,23 +151,9 @@ export default function List() {
     setLoading(() => false);
   }, [index, loading]);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const target = entries[0];
-      if (target.isIntersecting && !firstLoad && !loading) {
-        fetchData();
-        console.log("target isIntersecting");
-      }
-    });
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
-      }
-    };
-  }, [fetchData]);
+  useInfiniteLoading({fetchData, loaderRef, firstLoad, loading} );
+
+
 
   useEffect(() => {
     if (
