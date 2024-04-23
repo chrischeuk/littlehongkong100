@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-type useInfiniteLoadingType = {
+type useInfiniteLoadingPropsType = {
   fetchData: () => void;
   loaderRef: React.MutableRefObject<null>;
   firstLoad: boolean;
@@ -12,7 +12,7 @@ export default function useInfiniteLoading({
   loaderRef,
   firstLoad,
   loading,
-}: useInfiniteLoadingType) {
+}: useInfiniteLoadingPropsType) {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       const target = entries[0];

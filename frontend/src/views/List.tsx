@@ -6,40 +6,16 @@ import HelloFromRail from "../components/HelloFromRail";
 import "./list.css";
 import { useSearchParams } from "react-router-dom";
 import ListProduct from "../components/ListProduct";
-import JSONAPISerializer from "json-api-serializer";
 import Loading from "../components/Loading";
 import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
 import { convertDateToString } from "../utilities/TimeUtil";
 import useInfiniteLoading from "../hooks/useInfiniteLoading";
-
-var Serializer = new JSONAPISerializer();
-Serializer.register("item", {
-  id: "id",
-  relationships: {
-    lease_records: {
-      type: "lease_record",
-    },
-  },
-});
-
-Serializer.register("lease_record", {
-  id: "id",
-});
-
-Serializer.register("product", {
-  id: "id",
-  relationships: {
-    items: {
-      type: "item",
-    },
-  },
-});
+import getSerializedContent, {
+  Serializer,
+} from "../components/List/getSerializedContent";
+import { BACKEND_API_URL } from "../utilities/globalVariables";
 
 localStorage.theme = "light";
-
-const BACKEND_API_URL =
-  import.meta.env.REACT_APP_BACKEND_API_URL ||
-  "https://urban-lamp-qr6qg9w6pvcx75j-3000.app.github.dev";
 
 type ItemType = {
   id: string;
@@ -81,39 +57,6 @@ export default function List() {
   const loaderRef = useRef(null);
   const [reachedTheEnd, setReachedTheEnd] = useState(false);
 
-  const getSerializedContent = async () => {
-    console.log("getSerializedContent run");
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
-        {
-          params: {
-            date_from: startDate,
-            date_to: endDate,
-            page: 1,
-          },
-        }
-      );
-
-      // console.log(response.data);
-      Serializer.deserializeAsync("product", response.data)
-        .then((result: any) => {
-          // console.log(result);
-          updateProducts(result);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
-  };
-
   const fetchData = useCallback(async () => {
     if (loading || reachedTheEnd) return;
     setLoading(() => true);
@@ -151,10 +94,6 @@ export default function List() {
     setLoading(() => false);
   }, [index, loading]);
 
-  useInfiniteLoading({fetchData, loaderRef, firstLoad, loading} );
-
-
-
   useEffect(() => {
     if (
       firstLoad &&
@@ -169,10 +108,15 @@ export default function List() {
         ];
       });
       if (startDate !== null && endDate !== null) {
-        getSerializedContent();
+        getSerializedContent({
+          setLoading,
+          startDate,
+          endDate,
+          updateProducts,
+        });
       }
     } else {
-      getSerializedContent();
+      getSerializedContent({ setLoading, startDate, endDate, updateProducts });
     }
     setFirstLoad(false);
   }, []);
@@ -183,7 +127,12 @@ export default function List() {
         setReachedTheEnd(false);
         setIndex(2);
         updateProducts(() => []);
-        getSerializedContent();
+        getSerializedContent({
+          setLoading,
+          startDate,
+          endDate,
+          updateProducts,
+        });
         setSearchParams(
           (prev) => {
             prev.set("startDate", convertDateToString(startDate));
@@ -196,6 +145,7 @@ export default function List() {
     }
   }, [dateRange]);
 
+  useInfiniteLoading({ fetchData, loaderRef, firstLoad, loading });
   return (
     <div className="List ">
       <div className="sticky top-0  bg-white text-center w-full flex items-center justify-center">
@@ -206,7 +156,6 @@ export default function List() {
             endDate={endDate}
             setDateRange={setDateRange}
             withPortal
-            // inline
             disabledKeyboardNavigation
           />
         </div>
@@ -214,7 +163,6 @@ export default function List() {
           <AdjustmentsVerticalIcon className="w-5" />
         </div>
       </div>
-
       <ListProduct
         products={products}
         startDate={startDate}
