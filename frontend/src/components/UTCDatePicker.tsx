@@ -2,7 +2,7 @@ import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./UTCDatePicker.css";
-import { MagnifyingGlassIcon, AdjustmentsVerticalIcon} from "@heroicons/react/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export function convertUTCToLocalDate(date: Date | null): Date | null {
   if (!date) {
@@ -113,10 +113,14 @@ export default function UTCDatePicker({
   };
 
   const handleCalendarOpen = () => {
-    document.addEventListener('touchstart', (event: TouchEvent) => {
+    document.addEventListener(
+      "touchstart",
+      (event: TouchEvent) => {
         event.stopPropagation();
-    }, true);
-};
+      },
+      true
+    );
+  };
 
   return (
     <DatePicker
@@ -124,8 +128,6 @@ export default function UTCDatePicker({
       endDate={convertUTCToLocalDate(endDate)}
       customInput={<ExampleCustomInput />}
       onCalendarOpen={handleCalendarOpen}
-
-
       onChange={(update: [Date, Date]) =>
         setDateRange([
           convertLocalToUTCDate(update[0]),

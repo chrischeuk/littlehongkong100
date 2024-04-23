@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import UTCDatePicker from "../components/UTCDatePicker";
 import "react-datepicker/dist/react-datepicker.css";
 import HelloFromRail from "../components/HelloFromRail";
@@ -9,11 +8,9 @@ import ListProduct from "../components/ListProduct";
 import Loading from "../components/Loading";
 import { AdjustmentsVerticalIcon } from "@heroicons/react/24/solid";
 import { convertDateToString } from "../utilities/TimeUtil";
-import useInfiniteLoading from "../hooks/useInfiniteLoading";
-import getSerializedContent, {
-  Serializer,
-} from "../components/List/getSerializedContent";
-import { BACKEND_API_URL } from "../utilities/globalVariables";
+import useInfiniteLoading from "../components/List/useInfiniteLoading";
+import getSerializedContent from "../components/List/getSerializedContent";
+import useFetchData from "../components/List/useFetchData";
 
 localStorage.theme = "light";
 
@@ -57,42 +54,17 @@ export default function List() {
   const loaderRef = useRef(null);
   const [reachedTheEnd, setReachedTheEnd] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    if (loading || reachedTheEnd) return;
-    setLoading(() => true);
-    try {
-      const response = await axios.get(
-        `${BACKEND_API_URL}/api/v1/products/show_products_serialized`,
-        {
-          params: {
-            date_from: startDate,
-            date_to: endDate,
-            page: index,
-          },
-        }
-      );
-      console.log("fetchdata " + index);
-      setIndex((prevIndex) => prevIndex + 1);
-      Serializer.deserializeAsync("product", response.data)
-        .then((result: any) => {
-          updateProducts((prevItems) => [...prevItems, ...result]);
-        })
-        .catch((error: any) => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(() => false);
-        });
-      if (!response.data?.meta?.has_more_pages) {
-        setReachedTheEnd(() => true);
-      }
-    } catch (err) {
-      console.log(err);
-      setReachedTheEnd(() => true);
-      setLoading(() => false);
-    }
-    setLoading(() => false);
-  }, [index, loading]);
+  const fetchData = useFetchData({
+    loading,
+    reachedTheEnd,
+    setLoading,
+    index,
+    setIndex,
+    updateProducts,
+    setReachedTheEnd,
+    startDate,
+    endDate,
+  });
 
   useEffect(() => {
     if (

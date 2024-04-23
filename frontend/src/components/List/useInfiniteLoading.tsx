@@ -18,7 +18,7 @@ export default function useInfiniteLoading({
       const target = entries[0];
       if (target.isIntersecting && !firstLoad && !loading) {
         fetchData();
-        console.log("target isIntersecting");
+        // console.log("target isIntersecting");
       }
     });
     if (loaderRef.current) {
