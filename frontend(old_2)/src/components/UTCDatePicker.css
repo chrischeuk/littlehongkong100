@@ -1,9 +1,0 @@
-.react-datepicker__day--disabled {
-  /* color: red; */
-}
-.react-datepicker__day--today {
-  /* color: blue; */
-  border-color: black;
-  border-width: 1px;
-  border-style: dotted;
-}

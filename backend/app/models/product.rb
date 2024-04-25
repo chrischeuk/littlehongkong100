@@ -1,5 +1,5 @@
 class Product < ApplicationRecord
-  paginates_per 6
+  paginates_per 9
   has_many :items, dependent: :destroy
   belongs_to :brand
 
