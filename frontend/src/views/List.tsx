@@ -73,6 +73,7 @@ export default function List() {
       setFirstLoad(() => false);
       setReachedTheEnd(false);
       updateProducts(() => []);
+      window.scrollTo(0, 0);
       if (startDate && endDate) {
         setSearchParams(
           (prev) => {
