@@ -46,7 +46,7 @@ export function convertUTCToLocalDate(date: Date): Date {
   dateOut = new Date(
     dateOut.getUTCFullYear(),
     dateOut.getUTCMonth(),
-    dateOut.getUTCDate()
+    dateOut.getUTCDate(),
   );
   return dateOut;
 }
@@ -85,7 +85,7 @@ export default function Item() {
 
   const getSerializedContent = async () => {
     const response = await axios.get(
-      `${BACKEND_API_URL}/api/v1/items/show_item_serialized/${id}`
+      `${BACKEND_API_URL}/api/v1/items/show_item_serialized/${id}`,
     );
 
     Serializer.deserializeAsync("item", response.data)

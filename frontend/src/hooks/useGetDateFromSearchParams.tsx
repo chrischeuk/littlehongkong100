@@ -9,22 +9,24 @@ import { useSearchParams } from "react-router-dom";
 //   return dateOut;
 // }
 
-function parseParams(date: string | null): Date {
+function parseParams(date: string | null): Date | null {
   if (date != null) {
     const dateOut = new Date(0);
     dateOut.setUTCMilliseconds(Number(date));
     return dateOut;
   } else {
-    return new Date(0);
+    return null;
   }
 }
 
 export function useGetDateFromSearchParams(): [
-  Date[],
-  React.Dispatch<React.SetStateAction<Date[]>>
+  Date[] | [Date | null, Date | null],
+  React.Dispatch<React.SetStateAction<[Date | null, Date | null] | Date[]>>,
 ] {
   const [searchParams] = useSearchParams();
-  const [dateRange, setDateRange] = useState<Date[]>([]);
+  const [dateRange, setDateRange] = useState<
+    Date[] | [Date | null, Date | null]
+  >([]);
 
   useEffect(() => {
     const startDate = parseParams(searchParams.get("startDate"));

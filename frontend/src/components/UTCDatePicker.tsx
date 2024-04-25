@@ -41,7 +41,7 @@ type excludedDatesType = {
 type UTCDatePickerProps = {
   startDate: Date | null;
   endDate: Date | null;
-  setDateRange: React.Dispatch<React.SetStateAction<Date[] >>;
+  setDateRange: React.Dispatch<React.SetStateAction<[Date | null, Date | null] | Date[]>>;
   selectsRange: boolean;
   withPortal?: boolean;
   inline?: boolean;

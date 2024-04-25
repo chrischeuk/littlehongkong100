@@ -11,6 +11,7 @@ import { convertDateToString } from "../utilities/TimeUtil";
 import useInfiniteLoading from "../components/List/useInfiniteLoading";
 import getSerializedContent from "../components/List/getSerializedContent";
 import useFetchData from "../components/List/useFetchData";
+import { useGetDateFromSearchParams } from "../hooks/useGetDateFromSearchParams";
 
 localStorage.theme = "light";
 
@@ -42,7 +43,7 @@ function parseParams(date: string | null): Date {
 
 export default function List() {
   const [products, updateProducts] = React.useState<ProductType[]>([]);
-  const [dateRange, setDateRange] = React.useState<Date[] >([]);
+  const [dateRange, setDateRange] = useGetDateFromSearchParams();
   const [startDate, endDate] = dateRange;
   const [searchParams, setSearchParams] = useSearchParams({});
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
@@ -64,60 +65,82 @@ export default function List() {
   });
 
   useEffect(() => {
-    if (
-      firstLoad &&
-      searchParams.get("startDate") !== null &&
-      searchParams.get("endDate") !== null &&
-      searchParams.get("startDate") != "0"
-    ) {
-      setDateRange(() => {
-        return [
-          parseParams(searchParams.get("startDate")),
-          parseParams(searchParams.get("endDate")),
-        ];
-      });
-      if (startDate !== null && endDate !== null) {
-        getSerializedContent({
-          setLoading,
-          startDate,
-          endDate,
-          updateProducts,
-        });
-      }
-    } else {
+    // console.log(startDate , endDate);
+    console.log(startDate, endDate);
+    if (startDate !== undefined && endDate !== undefined) {
       getSerializedContent({ setLoading, startDate, endDate, updateProducts });
-    }
-    setFirstLoad(false);
-  }, []);
-
-  useEffect(() => {
-    if (!firstLoad) {
-      if (startDate !== null && endDate !== null) {
-        setReachedTheEnd(false);
-        setIndex(2);
-        updateProducts(() => []);
-        getSerializedContent({
-          setLoading,
-          startDate,
-          endDate,
-          updateProducts,
-        });
+      setIndex(2);
+      setFirstLoad(() => false);
+      setReachedTheEnd(false);
+      updateProducts(() => []);
+      if (startDate && endDate) {
         setSearchParams(
           (prev) => {
             prev.set("startDate", convertDateToString(startDate));
             prev.set("endDate", convertDateToString(endDate));
             return prev;
           },
-          { replace: true }
+          { replace: true },
         );
       }
     }
   }, [dateRange]);
 
+  // useEffect(() => {
+  //   if (
+  //     firstLoad &&
+  //     searchParams.get("startDate") !== null &&
+  //     searchParams.get("endDate") !== null &&
+  //     searchParams.get("startDate") != "0"
+  //   ) {
+  //     setDateRange(() => {
+  //       return [
+  //         parseParams(searchParams.get("startDate")),
+  //         parseParams(searchParams.get("endDate")),
+  //       ];
+  //     });
+  //     if (startDate !== null && endDate !== null) {
+  //       getSerializedContent({
+  //         setLoading,
+  //         startDate,
+  //         endDate,
+  //         updateProducts,
+  //       });
+  //     }
+  //   } else {
+  //     getSerializedContent({ setLoading, startDate, endDate, updateProducts });
+  //   }
+  //   setFirstLoad(false);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!firstLoad) {
+  //     if (startDate !== null && endDate !== null) {
+  //       setReachedTheEnd(false);
+  //       setIndex(2);
+  //       updateProducts(() => []);
+  //       getSerializedContent({
+  //         setLoading,
+  //         startDate,
+  //         endDate,
+  //         updateProducts,
+  //       });
+  //       setSearchParams(
+  //         (prev) => {
+  //           prev.set("startDate", convertDateToString(startDate));
+  //           prev.set("endDate", convertDateToString(endDate));
+  //           return prev;
+  //         },
+  //         { replace: true }
+  //       );
+  //     }
+  //   }
+  // }, [dateRange]);
+
   useInfiniteLoading({ fetchData, loaderRef, firstLoad, loading });
   return (
     <div className="List ">
-      <div className="sticky top-0  bg-white text-center w-full flex items-center justify-center">
+      <div className="sticky top-0  flex w-full items-center justify-center bg-white text-center">
         <div className="basis-3/4 sm:basis-2/4">
           <UTCDatePicker
             selectsRange={true}
@@ -128,7 +151,7 @@ export default function List() {
             disabledKeyboardNavigation
           />
         </div>
-        <div className=" bg-slate-100  m-5 w-11 h-11 rounded-full flex justify-center flex-shrink-0">
+        <div className="m-5 flex h-11 w-11 flex-shrink-0 justify-center rounded-full bg-slate-100">
           <AdjustmentsVerticalIcon className="w-5" />
         </div>
       </div>
