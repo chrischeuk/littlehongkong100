@@ -42,10 +42,7 @@ function parseParams(date: string | null): Date {
 
 export default function List() {
   const [products, updateProducts] = React.useState<ProductType[]>([]);
-  const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
-    null,
-    null,
-  ]);
+  const [dateRange, setDateRange] = React.useState<Date[] >([]);
   const [startDate, endDate] = dateRange;
   const [searchParams, setSearchParams] = useSearchParams({});
   const [firstLoad, setFirstLoad] = useState<boolean>(true);

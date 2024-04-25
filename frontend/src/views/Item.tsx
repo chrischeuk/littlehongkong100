@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useLocation, useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import UTCDatePicker from "../components/UTCDatePicker";
 import axios from "axios";
 import JSONAPISerializer from "json-api-serializer";
-import { ProductType } from "./List";
-import useLocalStorageState from "use-local-storage-state";
-import { CartProps } from "../components/ShoppingCart";
+
 import { useGetDateFromSearchParams } from "../hooks/useGetDateFromSearchParams";
 
 var Serializer = new JSONAPISerializer();
@@ -80,17 +78,6 @@ function processResponse(data: any | null): excludedDatesType[] | undefined {
 export default function Item() {
   const { id } = useParams();
   const [dateRange, setDateRange] = useGetDateFromSearchParams();
-  // const [dateRange, setDateRange] = React.useState<Date[] | null[]>([
-  //   null,
-  //   null,
-  // ]);
-  // const [searchParams, setSearchParams] = useSearchParams({
-  //   startDate: "",
-  //   endDate: "",
-  // });
-
-  // const startDate = cleanParams(searchParams.get("startDate"));
-  // const endDate = cleanParams(searchParams.get("endDate"));
   const [startDate, endDate] = dateRange;
   const [data, setData] = useState<responseType[] | null>(null);
   const [excludedDates, setExcludedDates] =

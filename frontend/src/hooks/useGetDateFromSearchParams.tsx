@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-function cleanParams(date: string | null): Date | null {
-  if (date == null) {
-    return null;
-  }
-  const dateOut = new Date(date);
-  return dateOut;
-}
+// function cleanParams(date: string | null): Date | null {
+//   if (date == null) {
+//     return null;
+//   }
+//   const dateOut = new Date(date);
+//   return dateOut;
+// }
 
 function parseParams(date: string | null): Date {
   if (date != null) {
@@ -23,7 +23,7 @@ export function useGetDateFromSearchParams(): [
   Date[],
   React.Dispatch<React.SetStateAction<Date[]>>
 ] {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [dateRange, setDateRange] = useState<Date[]>([]);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ export function useGetDateFromSearchParams(): [
     setDateRange(() => {
       return [startDate, endDate];
     });
-    // console.log(dateRange);
   }, []);
 
   return [dateRange, setDateRange];
