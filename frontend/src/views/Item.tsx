@@ -87,7 +87,6 @@ export default function Item() {
     const response = await axios.get(
       `${BACKEND_API_URL}/api/v1/items/show_item_serialized/${id}`,
     );
-
     Serializer.deserializeAsync("item", response.data)
       .then((result: any) => {
         setData(result);
@@ -111,33 +110,40 @@ export default function Item() {
     day: "numeric",
   });
   return (
-    <div className="flex flex-col items-center">
-      {/* <p>Item {id}</p> */}
-      <p className="text-3xl font-bold">{data && data[0].product_name}</p>
-      <p className="text-lg font-bold text-blue-500 ">{data && data[0].spec}</p>
-      {data && <img className="" src={data[0].images[0]} />}
-
-      <UTCDatePicker
-        selectsRange={true}
-        startDate={startDate}
-        endDate={endDate}
-        setDateRange={setDateRange}
-        // setSearchParams={setSearchParams}
-        withPortal
-        // inline
-        disabledKeyboardNavigation
-        excludeDateIntervals={excludedDates}
-        // minDate={convertUTCToLocalDate(data[0].available_from)}
-        available_from={data ? data[0].available_from : ""}
-        available_to={data ? data[0].available_to : ""}
-      />
+    <div className=" m-auto flex flex-col items-center sm:flex-row sm:items-start sm:pt-40">
+      <div className="text-center sm:basis-1/2">
+        <p className="text-3xl font-bold sm:hidden">
+          {data && data[0].product_name}
+        </p>
+        <p className="text-lg font-bold text-blue-500 sm:hidden">
+          {data && data[0].spec}
+        </p>
+        {data && <img className="max-w-100 sm:w-100" src={data[0].images[0]} />}
+      </div>
+      <div className=" sm:basis-1/2 sm:flex-col ">
+        <div className="hidden sm:block">
+          <p className=" text-3xl font-bold ">{data && data[0].product_name}</p>
+          <p className=" text-lg font-bold text-blue-500">
+            {data && data[0].spec}
+          </p>
+        </div>
+        <UTCDatePicker
+          selectsRange={true}
+          startDate={startDate}
+          endDate={endDate}
+          setDateRange={setDateRange}
+          // setSearchParams={setSearchParams}
+          withPortal
+          // inline
+          disabledKeyboardNavigation
+          excludeDateIntervals={excludedDates}
+          // minDate={convertUTCToLocalDate(data[0].available_from)}
+          available_from={data ? data[0].available_from : ""}
+          available_to={data ? data[0].available_to : ""}
+        />
+        <br />
+      </div>
       {/* <p>{excludedDates}</p> */}
-      <br />
-      <p>
-        {startDate &&
-          endDate &&
-          `${formatter.format(startDate)} - ${formatter.format(endDate)}`}
-      </p>
     </div>
   );
 }

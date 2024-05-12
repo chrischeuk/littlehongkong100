@@ -31,21 +31,11 @@ export type ProductType = {
   items: ItemType[];
 };
 
-function parseParams(date: string | null): Date {
-  if (date != null) {
-    const dateOut = new Date(0);
-    dateOut.setUTCMilliseconds(Number(date));
-    return dateOut;
-  } else {
-    return new Date(0);
-  }
-}
-
 export default function List() {
   const [products, updateProducts] = React.useState<ProductType[]>([]);
   const [dateRange, setDateRange] = useGetDateFromSearchParams();
   const [startDate, endDate] = dateRange;
-  const [searchParams, setSearchParams] = useSearchParams({});
+  const [, setSearchParams] = useSearchParams({});
   const [firstLoad, setFirstLoad] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [index, setIndex] = useState(2);
@@ -65,8 +55,6 @@ export default function List() {
   });
 
   useEffect(() => {
-    // console.log(startDate , endDate);
-    console.log(startDate, endDate);
     if (startDate !== undefined && endDate !== undefined) {
       getSerializedContent({ setLoading, startDate, endDate, updateProducts });
       setIndex(2);
@@ -87,61 +75,11 @@ export default function List() {
     }
   }, [dateRange]);
 
-  // useEffect(() => {
-  //   if (
-  //     firstLoad &&
-  //     searchParams.get("startDate") !== null &&
-  //     searchParams.get("endDate") !== null &&
-  //     searchParams.get("startDate") != "0"
-  //   ) {
-  //     setDateRange(() => {
-  //       return [
-  //         parseParams(searchParams.get("startDate")),
-  //         parseParams(searchParams.get("endDate")),
-  //       ];
-  //     });
-  //     if (startDate !== null && endDate !== null) {
-  //       getSerializedContent({
-  //         setLoading,
-  //         startDate,
-  //         endDate,
-  //         updateProducts,
-  //       });
-  //     }
-  //   } else {
-  //     getSerializedContent({ setLoading, startDate, endDate, updateProducts });
-  //   }
-  //   setFirstLoad(false);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!firstLoad) {
-  //     if (startDate !== null && endDate !== null) {
-  //       setReachedTheEnd(false);
-  //       setIndex(2);
-  //       updateProducts(() => []);
-  //       getSerializedContent({
-  //         setLoading,
-  //         startDate,
-  //         endDate,
-  //         updateProducts,
-  //       });
-  //       setSearchParams(
-  //         (prev) => {
-  //           prev.set("startDate", convertDateToString(startDate));
-  //           prev.set("endDate", convertDateToString(endDate));
-  //           return prev;
-  //         },
-  //         { replace: true }
-  //       );
-  //     }
-  //   }
-  // }, [dateRange]);
-
   useInfiniteLoading({ fetchData, loaderRef, firstLoad, loading });
+
   return (
     <div className="List ">
-      <div className="sticky top-0  flex w-full items-center justify-center bg-white text-center">
+      <div className="sticky top-0 flex w-full items-center justify-center bg-white text-center">
         <div className="basis-3/4 sm:basis-2/4">
           <UTCDatePicker
             selectsRange={true}

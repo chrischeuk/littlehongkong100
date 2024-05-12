@@ -9,7 +9,7 @@ import Item from "./views/Item";
 
 const App: React.FC = () => {
   return (
-    <div className="container  ">
+    <div className="container h-screen  ">
       <nav className=" mx-2 px-1 py-4 flex place-content-between md:mx-24">
         <ul>
           <Link to="/">Home</Link>
