@@ -1,11 +1,8 @@
 import React from "react";
 import "./App.css";
-
 import "./components/HelloFromRail";
-
-import List from "./views/List";
 import { Link, Route, Routes } from "react-router-dom";
-import Item from "./views/Item";
+import Index from "./views/Index";
 
 const App: React.FC = () => {
   return (
@@ -17,9 +14,9 @@ const App: React.FC = () => {
         <ul></ul>
       </nav>
       <Routes>
-        <Route path="/" element={<List />} />
-        <Route path="/item" element={<Item />} />
-        <Route path="/item/:id" element={<Item />} />
+        <Route path="/" element={<Index />} />
+        {/* <Route path="/item" element={<Item />} />
+        <Route path="/item/:id" element={<Item />} /> */}
       </Routes>
     </div>
   );
