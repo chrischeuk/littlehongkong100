@@ -4,5 +4,8 @@
   "css.lint.unknownAtRules": "ignore",
   "editor.quickSuggestions": {
     "strings": "on"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }
