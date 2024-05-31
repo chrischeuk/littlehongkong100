@@ -1,3 +1,4 @@
+import axios from 'axios';
 import mapboxgl from 'mapbox-gl'
 import React, { useRef, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client';
@@ -5,18 +6,18 @@ import { createRoot } from 'react-dom/client';
 mapboxgl.accessToken = 'pk.eyJ1Ijoid29yZHNvZm1vdXRoIiwiYSI6ImNrMmZ2MTNiZDBqczczY3A1azVxdnZsdDEifQ.l3j6LDp3rtjSRIKUonA7zg';
 var currentMarkers = [];
 
-const players = [
-    {
-        name: "JJ",
-        coordinates: [151.17, -33.5975],
-        description: "hello JJ"
-    },
-    {
-        name: "DD",
-        coordinates: [151.2093, -33.6],
-        description: "hello DD"
-    }
-]
+// const players = [
+//     {
+//         name: "JJ",
+//         coordinates: [151.17, -33.5975],
+//         description: "hello JJ"
+//     },
+//     {
+//         name: "DD",
+//         coordinates: [151.2093, -33.6],
+//         description: "hello DD"
+//     }
+// ]
 
 export default function index() {
     const mapContainer = useRef(null);
@@ -24,6 +25,18 @@ export default function index() {
     const [lng, setLng] = useState(151.2093);
     const [lat, setLat] = useState(-33.7);
     const [zoom, setZoom] = useState(11);
+    const [players, setPlayers] = useState([{
+        name: "JJ",
+        longitude: 151.17,
+        latitude: -33.5975,
+        description: "hello JJ"
+    },
+    {
+        name: "DD",
+        longitude: 151.2093,
+        latitude: -33.5975,
+        description: "hello DD"
+    }])
 
     const Marker = ({ onClick, children, player }) => {
         const _onClick = () => {
@@ -32,8 +45,8 @@ export default function index() {
 
         return (
             <div onClick={_onClick} className="marker  relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
                 {children}
             </div>
         );
@@ -43,13 +56,27 @@ export default function index() {
     };
 
     useEffect(() => {
+        const api = async () => {
+            try {
+                const response = await axios.get("https://live-location-app-a5fivvjqma-ts.a.run.app/positions/all");
+                setPlayers(response.data)
+                console.log(response.data)
+            } catch (err) {
+                console.log(err)
+            }
+
+        }
+        api()
+    }, [])
+
+    useEffect(() => {
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/satellite-streets-v12',
             center: [lng, lat],
             zoom: zoom,
-            pitch:60
+            pitch: 60
 
         });
 
@@ -61,7 +88,7 @@ export default function index() {
                 'tileSize': 512,
                 'maxzoom': 14
             });
-            map.current.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 2 });
+            map.current.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 2.5 });
             map.current.addSource("100km", {
                 type: "vector",
                 url: "mapbox://wordsofmouth.46lv3lxu",
@@ -72,8 +99,8 @@ export default function index() {
                 source: "100km",
                 "source-layer": "tracks",
                 paint: {
-                    "line-color": "#0047AB",
-                    "line-width": 4,
+                    "line-color": "#ed0a3f",
+                    "line-width": 3,
                     'line-dasharray': [1, 1]
                 },
             })
@@ -144,15 +171,16 @@ export default function index() {
                 );
 
                 // Create a Mapbox Marker at our new DOM node
+                console.log([player.longitude, player.latitude])
                 var oneMarker = new mapboxgl.Marker(ref.current)
-                    .setLngLat(player.coordinates)
+                    .setLngLat([player.longitude, player.latitude])
                     .addTo(map.current);
                 currentMarkers.push(oneMarker);
             });
         })
 
         // return () => { map.current.remove() };
-    });
+    }, [players]);
 
 
 
